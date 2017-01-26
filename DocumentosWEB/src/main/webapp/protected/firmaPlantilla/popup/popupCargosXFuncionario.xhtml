@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog id="popupCargosXFuncionario"
+	 	style="max-height: 80%; overflow:auto;"
+		widgetVar="popupCargosFuncionario" appendTo="@(body)"
+		width="80%" styleClass="dialog-top"
+		header="#{labelDocumentos.cargos_funcionario}" modal="true"
+		closable="false" resizable="false" closeOnEscape="false"
+		draggable="true">
+		<h:form id="frmpopupCargosFuncionario">
+			<p:fieldset styleClass="panelSeccion">
+				<p:dataTable
+					value="#{configurarFirmaDocumentoMB.lstFuncionarioCargoDTOs}"
+					id="dataTablePopupCargos" var="cargo" paginator="true"
+					paginatorTemplate="#{webPrm.param_paginator_template}"
+					rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+					rows="#{webPrm.param_initial_rows}" sortMode="multiple"
+					emptyMessage="#{labelGeneral.no_hay_registros_tabla}">
+
+					<f:facet name="header">
+						<h:outputText value="#{labelDocumentos.cargos_funcionario_tabla}" />
+					</f:facet>
+
+					<p:column sortBy="#{cargo.nombreCargo}">
+						<f:facet name="header">
+							<h:outputText value="#{labelDocumentos.nombre_cargo}" />
+						</f:facet>
+						<h:outputText value="#{cargo.nombreCargo}" />
+					</p:column>
+					<!--<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{labelDocumentos.procesos_cargo}" />
+						</f:facet>
+						<p:rowToggler />
+					</p:column> -->
+					<p:column headerText="#{labelDocumentos.procesos_cargo}">
+						<ui:repeat var="proc" value="#{cargo.listProcesosDTO}">
+							<h:outputText value="#{proc.nombreProceso}" />
+							<br />
+						</ui:repeat>
+					</p:column>
+					<!--  <p:rowExpansion>
+						<p:dataTable value="#{cargo.listProcesosDTO}"
+							id="dataTablePopupProcesos" var="proceso" paginator="true"
+							rows="5"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5">
+
+							<f:facet name="header">
+								<h:outputText value="#{labelDocumentos.procesos_cargo}" />
+							</f:facet>
+
+							<p:column sortBy="#{proceso.nombreProceso}">
+								<f:facet name="header">
+									<h:outputText value="#{labelDocumentos.nombre_proceso}" />
+								</f:facet>
+								<h:outputText value="#{proceso.nombreProceso}" />
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>-->
+				</p:dataTable>
+			</p:fieldset>
+			<h:panelGrid columns="1" cellspacing="7" styleClass="center-block">
+				<p:commandButton value="#{labelGeneral.boton_cerrar}"
+					onclick="PF('popupCargosFuncionario').hide()"></p:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</ui:composition>

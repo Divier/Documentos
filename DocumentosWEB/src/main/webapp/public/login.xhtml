@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	template="/WEB-INF/layouts/standardSinMenu.xhtml">
+
+	<ui:define name="contenido">
+		<h:panelGroup styleClass="center-box">
+			<h:form id="formLogin" prependId="false">
+				<p:panel id="campos-ingreso"
+					header="#{labelGeneral.ingreso_sistema}">
+					<p:focus context="campos-ingreso" />
+					<h:panelGrid columns="2" cellpadding="5" styleClass="center-block"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<h:outputLabel for="j_username" value="#{labelGeneral.usuario}"
+							styleClass="campo-obligatorio" />
+						<h:panelGroup>
+							<p:inputText id="j_username" required="true"
+								value="#{autenticacionDocumentosMB.login}"></p:inputText>
+							<p:message for="j_username"></p:message>
+						</h:panelGroup>
+						<h:outputLabel for="j_password" value="#{labelGeneral.contrasena}"
+							styleClass="campo-obligatorio" />
+						<h:panelGroup>
+							<p:password id="j_password" required="true"
+								value="#{autenticacionDocumentosMB.password}"></p:password>
+							<p:message for="j_password"></p:message>
+						</h:panelGroup>
+					</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="center-block">
+						<p:commandButton id="btnIngresar"
+							value="#{mensajesIngreso.btnIngresar}"
+							action="#{autenticacionDocumentosMB.login()}"
+							icon="c2-icon-ingresar" update=":messages :formLogin">
+							<p:tooltip for="btnIngresar"
+								value="#{mensajesIngreso.tooltip_btnIngresar}" />
+						</p:commandButton>
+						<p:commandButton id="btnRecordarPw"
+							action="#{autenticacionDocumentosMB.recuperarContraseña()}"
+							icon="c2-icon-recordar-pw" process="@this"
+							value="#{mensajesIngreso.btnRecordarPw}">
+							<p:tooltip for="btnRecordarPw"
+								value="#{mensajesIngreso.tooltip_btnRecordarPw}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:panel>
+
+			</h:form>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

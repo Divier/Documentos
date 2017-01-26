@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="template_properties" class="hidden">
+				{{#properties}} 
+					<p:fieldset id="datos-principal" styleClass="fieldset-formulario"
+						legend="{{title}}">
+	
+						<h:panelGrid id="panel-formulario" styleClass="center-block"
+							columns="1" columnClasses="label-col,input-col,label-col,input-col">
+						{{#fields}} 
+							{{#isText}}
+								<p:outputLabel value="{{label}}"></p:outputLabel>
+								<h:panelGroup>
+									<input
+										id="{{id}}" name="{{id}}" type="text" readonly="{{readonly}}"
+										value="{{value}}"
+										class="template_editor_inputs_InputSkin-input {{classname}}" placeholder=""
+										maxlength="{{maxlength}}" />
+								</h:panelGroup>
+							{{/isText}} 
+							{{#isTextarea}}
+								<p:outputLabel value="{{label}}"></p:outputLabel>
+								<textarea id="{{id}}" name="{{id}}" readonly="{{readonly}}"
+									class="template_editor_inputs_TextAreaSkin-textarea {{classname}}"
+									placeholder="" maxlength="{{maxlength}}">{{value}}</textarea>
+							{{/isTextarea}} 
+							{{#isSelect}}
+								<p:outputLabel value="{{label}}" styleClass="label {{classname}}" ></p:outputLabel>
+								<select
+										id="{{id}}" name="{{id}}"
+										class="template_editor_inputs_SelectSkin-select {{classname}}">
+										{{#options}}
+											{{#selected}}
+											<option value="{{value}}" selected="selected" class="option {{classname}}" >{{label}}</option> 
+											{{/selected}}										
+											{{^selected}}
+											<option value="{{value}}" class="option {{classname}}" >{{label}}</option> 
+											{{/selected}}
+										{{/options}}
+									</select>
+							{{/isSelect}} 
+						{{/fields}}
+						</h:panelGrid>
+					</p:fieldset>
+				{{/properties}}	
+	</div>
+</ui:composition>

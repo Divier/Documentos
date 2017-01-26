@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+	<application>
+		<action-listener>org.primefaces.application.DialogActionListener</action-listener>
+		<navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+		<view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>co.com.datatools.c2.bundle.comun.LabelComun</base-name>
+			<var>lbComun</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.login.Mensajes</base-name>
+			<var>mensajesIngreso</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.c2.bundle.comun.ParametrosWeb</base-name>
+			<var>webPrm</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.general.Mensajes</base-name>
+			<var>labelGeneral</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.admin.Mensajes</base-name>
+			<var>labelAdmin</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.documentos.Mensajes</base-name>
+			<var>labelDocumentos</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.plantillas.Mensajes</base-name>
+			<var>labelPlantillas</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>co.com.datatools.documentos.bundle.variables.Mensajes</base-name>
+			<var>labelVariables</var>
+		</resource-bundle>
+		<message-bundle>co.com.datatools.documentos.bundle.faces.Mensajes</message-bundle>
+	</application>
+	<converter>
+		<converter-for-class>java.lang.String</converter-for-class>
+		<converter-class>co.com.datatools.util.jsf.StringTrimmer</converter-class>
+	</converter>
+</faces-config>

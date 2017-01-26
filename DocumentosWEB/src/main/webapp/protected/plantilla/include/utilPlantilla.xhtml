@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="template_editor_selected_box hidden"
+		style="visibility: visible; width: 590px; min-height: 50px; left: 45px; top: 523px; z-index: 1">
+		<div class="hidden template_editor_selected_box-posSizeIndicator"
+			style="-webkit-transform: rotate(360deg);"></div>
+		<div class="hidden template_editor_selected_box-minHeightMark"></div>
+		<div class="template_editor_selected_box-left">
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-bottom">
+			<p class="knob "></p>
+			<p class="pushKnob template_editor_selected_box-pushKnob "></p>
+		</div>
+		<div class="template_editor_selected_box-right">
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-top">
+			<div class="notDirectEdit template_editor_selected_box-dragHandle "></div>
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-topLeft">
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-bottomLeft">
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-bottomRight">
+			<p class="knob "></p>
+		</div>
+		<div class="template_editor_selected_box-topRight">
+			<p class="knob "></p>
+		</div>
+		<div class="notDirectEdit template_editor_selected_box-anchorGuides"></div>
+		<div class="template_editor_selected_box-multiSelectLayer"></div>
+		<div class="template_editor_selected_box-rotateHandle hidden"></div>
+		<div class="template_editor_selected_box-rotationResetHandle hidden"></div>
+	</div>
+	
+<!-- 	Propiedades de elementos que se pueden agregar a la plantilla -->
+
+	<p:dialog modal="false" id="propertiesDialog" widgetVar="propertiesDialog"
+		header="#{labelPlantillas.propiedades}" draggable="false" styleClass="properties"
+		closable="false" resizable="false" appendTo="@(body)" 
+		onShow="if(Documentos.Plantillas != undefined) {Documentos.Plantillas.beforeShowProperties();} else { Documentos.DocumentosEd.beforeShowProperties();}">
+<!-- 	<div id="propertiesPanel" -->
+<!-- 		class="prettyScroll properties" title="Propiedades"> -->
+		<p>#{labelPlantillas.descripcion_properties}</p>
+		<br/>
+		
+		<p:panel id="campos-registro" styleClass="panel-formulario" style="overflow: auto;max-height: 410px;"
+			header="#{labelGeneral.registrar_plantillas}">
+		</p:panel>
+<!-- 	</div> -->
+</p:dialog>
+<p:commandButton id="propertiesButton" value="#{labelPlantillas.propiedades}" styleClass="propertiesButton hidden" />
+
+</ui:composition>

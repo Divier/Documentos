@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>co.com.datatools.documentos</groupId>
+		<artifactId>DocumentosParent</artifactId>
+		<version>2.0.20</version>
+		<relativePath>../DocumentosParent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>DocumentosEJB</artifactId>
+	<packaging>ejb</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.spec</groupId>
+			<artifactId>jboss-javaee-6.0</artifactId>
+			<version>${jboss-javaee-6.0.version}</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>${jboss-logging.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.com.datatools.documentos</groupId>
+			<artifactId>DocumentosEJBClient</artifactId>
+			<version>${DocumentosEJBClient.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.com.datatools.documentos</groupId>
+			<artifactId>DocumentosJPA</artifactId>
+			<version>${DocumentosJPA.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.com.datatools.documentos</groupId>
+			<artifactId>DocumentosUtil</artifactId>
+			<version>${DocumentosUtil.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.com.datatools.util</groupId>
+			<artifactId>UtilidadesEJB</artifactId>
+			<version>${UtilidadesEJB.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.com.datatools.documentos.cm</groupId>
+			<artifactId>GestorArchivosClient</artifactId>
+			<version>${GestorArchivosCliente.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.com.datatools.util</groupId>
+			<artifactId>UtilidadesJSE</artifactId>
+			<version>${UtilidadesJSE.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- ALFRESCO -->
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client</artifactId>
+			<version>${google-oauth-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson</artifactId>
+			<version>${google-http-client-jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson-mapper-asl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-client-impl</artifactId>
+			<version>${chemistry-opencmis-client-impl.version}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<!-- Esta exclusion se debe a un problema de classpath al desplegar con 
+					arquillian verificar si no afecta la logica -->
+				<exclusion>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>org.osgi.core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.alfresco.cmis.client</groupId>
+			<artifactId>alfresco-opencmis-extension</artifactId>
+			<version>${alfresco-opencmis-extension.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>${tika-parsers.version}</version>
+			<exclusions>
+				<!-- Esta exclusion se debe a un problema de redespliegue en el jboss
+					verificar si no afecta la logica -->
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>archiva.internal</id>
+			<name>Internal Release Repository</name>
+			<url>https://c2-srv3.datatools.com.co:8443/archiva/repository/internal/</url>
+		</repository>
+		<snapshotRepository>
+			<id>archiva.snapshots</id>
+			<url>https://c2-srv3.datatools.com.co:8443/archiva/repository/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+</project>

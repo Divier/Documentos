@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog id="dgconfigurarFirmaDocumento"
+		widgetVar="popupConfigurarFirmaDocumento" styleClass="dialog-top"
+		header="#{labelDocumentos.configurar_firma_documento}" modal="true"
+	 	style="max-height: 80%; overflow:auto;" width="80%"
+		appendTo="@(body)" resizable="false" closable="false"
+		closeOnEscape="false">
+		<p:ajax event="close" process="@this" update=":form-configura" listener="#{configurarFirmaDocumentoMB.handleClose}" />
+
+		<h:form id="form-configura">
+			<p:panel id="campos-registro" styleClass="panel-formulario"
+				header="#{labelDocumentos.configuracion_firma}">
+				<p:fieldset id="datos-principal" styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_registro}">
+
+					<!--Cuando el formulario tiene multiples secciones de campos, repetir este fieldset-->
+					<p:fieldset id="datos-firma" styleClass="fieldset-formulario"
+						legend="#{labelDocumentos.configuracion_firma}">
+						<h:panelGrid styleClass="center-block" columns="4"
+							columnClasses="label-col,input-col,label-col,input-col">
+							<p:outputLabel value="#{labelDocumentos.firma_mecanica_por}"
+								styleClass="campo-obligatorio" for="selOneMenTipoFirma"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneMenu id="selOneMenTipoFirma" required="true"
+									value="#{configurarFirmaDocumentoMB.firmaConfigurar.tipoFirmaPlantillaDTO.idTipoFirmaPlantilla}">
+									<f:selectItems
+										value="#{configurarFirmaDocumentoMB.lstTipoFirmaPlantillaDTOs}"></f:selectItems>
+									<p:ajax event="change" process="@this" update="campos-registro"
+										listener="#{configurarFirmaDocumentoMB.validarTipoFirma()}"></p:ajax>
+								</p:selectOneMenu>
+							</h:panelGroup>
+							<p:outputLabel
+								value="#{labelDocumentos.nombre_debajo_firma_mecanica}"
+								for="selOneRadVisualizar"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneRadio id="selOneRadVisualizar"
+									value="#{configurarFirmaDocumentoMB.firmaConfigurar.mostrarNombreFuncionario}">
+									<f:selectItem
+										itemLabel="#{labelDocumentos.nombre_debajo_firma_mecanica_si}"
+										itemValue="#{true}" />
+									<f:selectItem
+										itemLabel="#{labelDocumentos.nombre_debajo_firma_mecanica_no}"
+										itemValue="#{false}" />
+									<p:ajax event="change" process="@this" update="campos-registro"></p:ajax>
+								</p:selectOneRadio>
+							</h:panelGroup>
+							<p:outputLabel
+								value="#{labelDocumentos.cargo_debajo_firma_mecanica}"
+								for="selOneRadVisualizarCargo"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneRadio id="selOneRadVisualizarCargo"
+									value="#{configurarFirmaDocumentoMB.firmaConfigurar.mostrarCargoFuncionario}">
+									<f:selectItem
+										itemLabel="#{labelDocumentos.cargo_debajo_firma_mecanica_si}"
+										itemValue="#{true}" />
+									<f:selectItem
+										itemLabel="#{labelDocumentos.cargo_debajo_firma_mecanica_no}"
+										itemValue="#{false}" />
+									<p:ajax event="change" process="@this" update="campos-registro"></p:ajax>
+								</p:selectOneRadio>
+							</h:panelGroup>
+
+							<p:outputLabel value="#{labelDocumentos.proceso_configura_firma}"
+								for="selOneMenProceso" styleClass="campo-obligatorio"
+								rendered="#{configurarFirmaDocumentoMB.seleccionarProceso}" />
+							<h:panelGroup
+								rendered="#{configurarFirmaDocumentoMB.seleccionarProceso}">
+								<p:selectOneMenu id="selOneMenProceso"
+									value="#{configurarFirmaDocumentoMB.procesoSeleccionado.idProceso}"
+									required="#{configurarFirmaDocumentoMB.seleccionarProceso}"
+									requiredMessage="#{labelGeneral.requerido}">
+									<f:selectItem itemLabel="#{labelGeneral.label_select}"
+										noSelectionOption="true" />
+									<f:selectItems
+										value="#{configurarFirmaDocumentoMB.lstProcesoDTOs}"></f:selectItems>
+									<p:ajax event="change"
+										listener="#{configurarFirmaDocumentoMB.obtenerCargosProceso}"
+										process="@this" update="datos-firma, :messages, msg_proceso"></p:ajax>
+								</p:selectOneMenu>
+								<p:message for="selOneMenProceso" id="msg_proceso" />
+							</h:panelGroup>
+							<p:outputLabel value="#{labelDocumentos.cargo_configura_firma}"
+								for="selOneMenCargo" styleClass="campo-obligatorio"
+								rendered="#{configurarFirmaDocumentoMB.seleccionarProceso}"></p:outputLabel>
+							<h:panelGroup
+								rendered="#{configurarFirmaDocumentoMB.seleccionarProceso}">
+								<p:selectOneMenu id="selOneMenCargo"
+									value="#{configurarFirmaDocumentoMB.firmaConfigurar.cargoDTO.idCargo}"
+									required="#{configurarFirmaDocumentoMB.seleccionarProceso}"
+									requiredMessage="#{labelGeneral.requerido}">
+									<f:selectItem itemLabel="#{labelGeneral.label_select}"
+										noSelectionOption="true" />
+									<f:selectItems
+										value="#{configurarFirmaDocumentoMB.lstCargosProceso}"></f:selectItems>
+								</p:selectOneMenu>
+								<p:message for="selOneMenCargo" id="msg_cargo" />
+							</h:panelGroup>
+							<p:outputLabel
+								value="#{labelDocumentos.tipo_fecha_referencia_configura_firma}"
+								for="selOneMenTipofecha" styleClass="campo-obligatorio"
+								rendered="#{configurarFirmaDocumentoMB.verTiposFechaReferencia}"></p:outputLabel>
+							<h:panelGroup
+								rendered="#{configurarFirmaDocumentoMB.verTiposFechaReferencia}">
+								<p:selectOneMenu id="selOneMenTipofecha" required="true"
+									value="#{configurarFirmaDocumentoMB.firmaConfigurar.tipoFechaReferenciaDTO.idTipoFecha}">
+									<f:selectItems
+										value="#{configurarFirmaDocumentoMB.lstTiposFechaReferencia}"></f:selectItems>
+									<p:ajax event="change" process="@this" update="campos-registro"
+										listener="#{configurarFirmaDocumentoMB.consultarVariablesFecha}"></p:ajax>
+								</p:selectOneMenu>
+								<p:message for="selOneMenTipofecha" id="msg_tipofecha" />
+							</h:panelGroup>
+							<p:outputLabel
+								value="#{labelDocumentos.variable_fecha_plantilla}"
+								for="selOneMenVarPlantilla" styleClass="campo-obligatorio"
+								rendered="#{configurarFirmaDocumentoMB.verVariablesPlantilla}"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneMenu id="selOneMenVarPlantilla" required="true"
+									requiredMessage="#{labelGeneral.requerido}"
+									rendered="#{configurarFirmaDocumentoMB.verVariablesPlantilla}"
+									value="#{configurarFirmaDocumentoMB.variablePlantillaSeleccionada}">
+									<f:selectItems
+										value="#{configurarFirmaDocumentoMB.lVariablesFecha}"></f:selectItems>
+									<p:ajax event="change" process="@this"></p:ajax>
+								</p:selectOneMenu>
+								<p:message for="selOneMenVarPlantilla" id="msg_varPlantilla" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</p:fieldset>
+
+					<!-- INICIO BUSQUEDA DE FUNCIONARIOS -->
+					<p:panel id="datos-detalle" styleClass="panel-formulario"
+						rendered="#{configurarFirmaDocumentoMB.verOpcionesFuncionario}"
+						header="#{labelDocumentos.busqueda_funcionarios}">
+						<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+							<p:messages id="msgsFuncionario" autoUpdate="true" showDetail="true"
+								showSummary="false" globalOnly="true" />
+						</h:panelGrid>
+						<p:fieldset styleClass="fieldset-formulario"
+							legend="#{lbComun.msg_fieldset_consultar}">
+
+							<h:panelGrid id="panel-formulario" styleClass="formulario-servicio center-block"
+								columns="2"
+								columnClasses="label-col,input-col,label-col,input-col">
+
+								<p:outputLabel value="#{labelDocumentos.tipo_documento} "
+									for="selOneMenTipoDocumento"></p:outputLabel>
+								<h:panelGroup>
+									<p:selectOneMenu
+										value="#{configurarFirmaDocumentoMB.funcionarioBuscar.siglaTipoIdentificacion}"
+										id="selOneMenTipoDocumento">
+										<f:selectItem itemLabel="#{labelGeneral.label_select}"
+											itemValue="" />
+										<f:selectItems value="#{configurarFirmaDocumentoMB.lstTipoIdentificacion}" />
+									</p:selectOneMenu>
+									<p:message for="selOneMenTipoDocumento" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{labelDocumentos.numero_documento} "
+									for="txtNumeroDocumento"></p:outputLabel>
+								<h:panelGroup>
+									<p:inputText id="txtNumeroDocumento" maxlength="20"
+										value="#{configurarFirmaDocumentoMB.funcionarioBuscar.numeroDocumIdent}"></p:inputText>
+									<p:message for="txtNumeroDocumento" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{labelDocumentos.nombre_funcionario} "
+									for="txtNombreFuncionario"></p:outputLabel>
+								<h:panelGroup>
+									<p:inputText id="txtNombreFuncionario" maxlength="125"
+										value="#{configurarFirmaDocumentoMB.funcionarioBuscar.nombreFuncionario}"></p:inputText>
+									<p:message for="txtNombreFuncionario" />
+								</h:panelGroup>
+
+							</h:panelGrid>
+
+							<h:panelGrid styleClass="center-block" columns="1"
+								cellpadding="5">
+								<p:commandButton id="btnConsultar" styleClass="_op-CONSULTAR"
+									action="#{configurarFirmaDocumentoMB.consultarFuncionario}"
+									icon="c2-icon-consultar" process="@form"
+									value="#{lbComun.btnConsultar}"
+									update="msgsFuncionario panel-resultado datos-detalle">
+									<p:tooltip for="btnConsultar" value="#{lbComun.btnConsultar}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:fieldset>
+						
+						<p:panel id="panel-resultado">
+							<p:panel header="#{labelGeneral.titulo_resultados_consulta}"
+								toggleable="true"
+								rendered="#{configurarFirmaDocumentoMB.lstFuncionarioDTOs.size()==0 and configurarFirmaDocumentoMB.funcionariosConsultados}">
+								<p:outputLabel value="#{labelGeneral.no_hay_registros_tabla}" />
+							</p:panel>
+							<p:panel id="resultado-consulta" styleClass="panel-res-consulta"
+								header="#{labelGeneral.titulo_resultados_consulta}"
+								toggleable="true"
+								rendered="#{configurarFirmaDocumentoMB.lstFuncionarioDTOs.size()>0}">
+								<h:panelGrid id="acciones-top">
+									<f:facet name="footer">
+										<p:commandButton id="btnVerCargos" styleClass="_op-EDITAR"
+											action="#{configurarFirmaDocumentoMB.consultarFuncionarioCargos()}"
+											icon="c2-icon-editar" process="@this" update=":frmpopupCargosFuncionario"
+											value="#{labelDocumentos.tooltip_ver_cargo_funcionario}"
+											disabled="#{configurarFirmaDocumentoMB.funcionarioSeleccionado==null}">
+											<p:tooltip for="btnVerCargos"
+												value="#{labelDocumentos.tooltip_ver_cargo_funcionario}" />
+										</p:commandButton>
+									</f:facet>
+								</h:panelGrid>
+	
+								<p:dataTable id="tabla-resultados"
+									value="#{configurarFirmaDocumentoMB.lstFuncionarioDTOs}"
+									var="registro" rowKey="#{registro.idFuncionario}"
+									selection="#{configurarFirmaDocumentoMB.funcionarioSeleccionado}"
+									paginator="true"
+									paginatorTemplate="#{webPrm.param_paginator_template}"
+									rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+									rows="#{webPrm.param_initial_rows}" sortMode="multiple"
+									emptyMessage="#{labelGeneral.no_hay_registros_tabla}">
+	
+									<p:ajax event="rowSelectRadio"
+										process=":form-configura:tabla-resultados"
+										update=":form-configura:acciones-top" global="false" />
+	
+									<p:column selectionMode="single" style="width:12%" />
+	
+									<p:column sortBy="#{registro.siglaTipoIdentificacion}"
+										headerText="#{labelDocumentos.tipo_documento}">
+										<h:outputText value="#{registro.nombreTipoIdentificacion}" />
+									</p:column>
+									<p:column sortBy="#{registro.numeroDocumIdent}"
+										headerText="#{labelDocumentos.numero_documento}">
+										<h:outputText value="#{registro.numeroDocumIdent}" />
+									</p:column>
+									<p:column sortBy="#{registro.nombreFuncionario}"
+										headerText="#{labelDocumentos.nombre_funcionario}">
+										<h:outputText value="#{registro.nombreFuncionario}" />
+									</p:column>
+	
+								</p:dataTable>
+							</p:panel>
+						</p:panel>
+					</p:panel>
+					<h:panelGrid styleClass="center-block" columns="3" cellpadding="5">
+						<p:commandButton id="btnGuardar"
+							action="#{configurarFirmaDocumentoMB.guardarConfiguracionFirma}"
+							icon="c2-icon-guardar" process="@form"
+							value="#{lbComun.btnGuardar}" update=":messages :form-configura">
+							<p:tooltip for="btnGuardar" value="#{lbComun.btnGuardar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_guardar}" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{configurarFirmaDocumentoMB.plantillaSesion}" target="#{registraPlantillaMB.plantillaDTO}"/>
+						</p:commandButton>
+						<p:commandButton id="btnCancelar"
+							icon="c2-icon-cancelar" process="@this" immediate="true"
+							value="#{lbComun.btnCancelar}"
+							onclick="PF('popupConfigurarFirmaDocumento').hide(); Documentos.Plantillas.hideSign();">
+							<p:tooltip for="btnCancelar" value="#{lbComun.btnCancelar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_volver_cancelar}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>		
+	</p:dialog>
+
+	<ui:include
+		src="/protected/firmaPlantilla/popup/popupCargosXFuncionario.xhtml"></ui:include>
+</ui:composition>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog id="dgfirmaDigitalDocumento"
+		header="#{labelDocumentos.firmar_digitalmente_documento}" modal="true"
+		appendTo="@(body)" resizable="true" showEffect="clip"
+		hideEffect="clip" widgetVar="popupfirmaDigitalDocumento"
+		closable="false">
+
+		<h:form id="form-ingreso">
+			<p:panel id="campos-registro" styleClass="panel-formulario"
+				header="#{labelGeneral.registrar_plantillas}">
+				<p:fieldset id="datos-principal" styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_registro}">
+
+					<h:panelGrid id="panel-formulario" styleClass="center-block"
+						columns="1"
+						columnClasses="label-col,input-col,label-col,input-col">
+
+						<p:fileUpload
+							fileUploadListener="#{firmarDigitalmenteDocumentoMB.handleFileUpload}"
+							mode="advanced" disabled="false" process="@this"
+							id="archivoCertificado" required="true"
+							label="#{labelDocumentos.archivo_certificado_digital}"
+							auto="true" requiredMessage="#{labelGeneral.requerido}" />
+						<p:message for="archivoCertificado" id="msg_archivoCertificado" />
+					</h:panelGrid>
+					<h:panelGrid id="panel-formulario2" styleClass="center-block"
+						columns="2"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<p:outputLabel value="#{labelDocumentos.usuario_certificado}"
+							styleClass="campo-obligatorio" for="txtUsuario"></p:outputLabel>
+						<h:panelGroup>
+							<p:inputText id="txtUsuario" required="true"
+								value="#{firmarDigitalmenteDocumentoMB.usuarioCertificado}"
+								requiredMessage="#{labelGeneral.requerido}">
+							</p:inputText>
+							<p:message for="txtUsuario" id="msg_usuario_certificado" />
+						</h:panelGroup>
+						<p:outputLabel value="#{labelDocumentos.contrasena_certificado}"
+							styleClass="campo-obligatorio" for="pswContrasena"></p:outputLabel>
+						<h:panelGroup>
+							<p:password id="pswContrasena" required="true"
+								value="#{firmarDigitalmenteDocumentoMB.contrasenaCertificado}"
+								requiredMessage="#{labelGeneral.requerido}">
+							</p:password>
+							<p:message for="pswContrasena" id="msg_contrasena_certificado" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton id="btnGuardar"
+							action="#{firmarDigitalmenteDocumentoMB.guardarFirmaDigital()}"
+							icon="c2-icon-guardar" process="@form"
+							value="#{lbComun.btnGuardar}" update=":messages :form-ingreso">
+							<p:tooltip for="btnGuardar" value="#{lbComun.btnGuardar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_guardar}" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:commandButton id="btnCancelar"
+							action="#{firmarDigitalmenteDocumentoMB.cancelar()}"
+							icon="c2-icon-cancelar" process="@this" immediate="true"
+							value="#{lbComun.btnCancelar}"
+							oncomplete="PF('popupfirmaDigitalDocumento').hide()">
+							<p:tooltip for="btnCancelar" value="#{lbComun.btnCancelar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_volver_cancelar}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	
+	<ui:include src="/protected/firmaDigital/popup/popupConfirmaFirmaDigital.xhtml"></ui:include>
+</ui:composition>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+	<ui:define name="contenido">
+		<h:form id="form-contenido">
+			<p:panel id="campos-consulta" styleClass="panel-formulario"
+				header="#{labelAdmin.titulo_consultar_usuarios}">
+				<p:fieldset styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_consultar}">
+
+					<!-- FILTROS DE BUSQUEDA -->
+					<h:panelGrid id="panel-formulario" styleClass="center-block"
+						columns="4"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<p:outputLabel value="#{labelAdmin.label_nombre_usuario}"></p:outputLabel>
+						<h:panelGroup>
+							<p:inputText id="txtLoginUsuario" value="#{usuariosMB.usuarioDTO.loginUsuario}" maxlength="16"
+								validatorMessage="#{labelAdmin.msg_formato_usuario_invalido}">
+						  		<f:validateRegex
+									pattern="^[-._a-zA-Z0-9Ññ]+" />
+							</p:inputText>
+							<p:message for="txtLoginUsuario"></p:message>
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<!-- BOTONES -->
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton id="btnConsultar" styleClass="_op-CONSULTAR"
+							action="#{usuariosMB.consultarUsuarios()}"
+							icon="c2-icon-consultar" process="@form"
+							value="#{lbComun.btnConsultar}"
+							rendered="#{menuMB.validarOperacion('usuarios','consultar')}"
+							update=":messages :form-resultado :form-contenido">
+							<p:tooltip for="btnConsultar" value="#{lbComun.btnConsultar}" />
+						</p:commandButton>
+						<p:commandButton id="btnRegistrar" styleClass="_op-CONSULTAR"
+							action="#{usuariosMB.irRegistrarUsuarios()}" icon="c2-icon-crear"
+							process="@form" value="#{lbComun.btnCrear}"
+							rendered="#{menuMB.validarOperacion('usuarios','crear')}"
+							update=":messages :form-resultado :form-contenido">
+							<p:tooltip for="btnRegistrar" value="#{lbComun.btnCrear}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+
+		<!-- FORMULARIO DE RESULTADOS -->
+		<h:form id="form-resultado">
+			<p:panel header="#{labelGeneral.titulo_resultados_consulta}"
+				toggleable="true"
+				rendered="#{usuariosMB.usuarios.size() == 0 and usuariosMB.consultaRealizada}">
+				<p:outputLabel value="#{labelGeneral.no_hay_registros_tabla}" />
+			</p:panel>
+			<p:panel id="panelResultados" styleClass="panel-res-consulta"
+				header="#{labelGeneral.titulo_resultados_consulta}"
+				toggleable="true" rendered="#{usuariosMB.usuarios.size() > 0}">
+				<p:dataTable id="tablaResultados" value="#{usuariosMB.usuarios}"
+					var="usuario" rowKey="#{usuario.idUsuario}"
+					paginatorTemplate="#{webPrm.param_paginator_template}"
+					paginator="true"
+					rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+					rows="#{webPrm.param_initial_rows}">
+					<p:column headerText="#{labelAdmin.label_tipo_documento_funcionario}"
+						sortBy="#{usuario.funcionarioDTO.nombreTipoIdentificacion}">
+						<p:outputLabel
+							value="#{usuario.funcionarioDTO.nombreTipoIdentificacion}"></p:outputLabel>
+					</p:column>				
+					<p:column headerText="#{labelAdmin.label_documento_funcionario}"
+						sortBy="#{usuario.funcionarioDTO.numeroDocumIdent}">
+						<p:outputLabel
+							value="#{usuario.funcionarioDTO.siglaTipoIdentificacion} #{usuario.funcionarioDTO.numeroDocumIdent}"></p:outputLabel>
+					</p:column>
+					<p:column headerText="#{labelAdmin.label_nombre_usuario}"
+						sortBy="#{usuario.loginUsuario}">
+						<p:outputLabel value="#{usuario.loginUsuario}"></p:outputLabel>
+					</p:column>
+					<p:column headerText="#{labelAdmin.label_funcionario}"
+						sortBy="#{usuario.funcionarioDTO.nombreFuncionario}">
+						<p:outputLabel value="#{usuario.funcionarioDTO.nombreFuncionario}"></p:outputLabel>
+					</p:column>
+					
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

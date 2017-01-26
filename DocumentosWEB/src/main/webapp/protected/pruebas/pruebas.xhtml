@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+
+	<ui:define name="contenido">
+		<h:form id="frmPruebas" enctype="multipart/form-data">
+		
+			<p:panel styleClass="pnlForm" id="pPrincipal">
+				<p:fieldset styleClass="fieForm">
+					<h:panelGrid columns="1" styleClass="gridFormularios">
+		
+								<pe:ckEditor id="editor" value="#{registraPlantillaMB.xmlPlantilla}">
+									<p:ajax event="save"
+										listener="#{registraPlantillaMB.guardar()}" />
+								</pe:ckEditor>
+						<h:panelGrid columns="2" cellspacing="7"
+							styleClass="gridFormularios">
+							<p:commandButton value="CrearVariablePlantilla"
+								oncomplete="PF('popupCrearVariable').show()">
+							</p:commandButton>
+							<p:commandButton value="ConfigurarFirmaDocumento"
+								onclick="PF('popupConfigurarFirmaDocumento').show()">
+							</p:commandButton>
+													    <p:commandButton value="#{labelDocumentos.firmar_digitalmente_documento}"
+													    	onclick="PF('popupfirmaDigitalDocumento').show()">
+													    </p:commandButton>         
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+
+<!-- 		<ui:include src="/protected/variable/popup/crearVariablePlantilla.xhtml"></ui:include> -->
+<!-- 		<ui:include src="/protected/firmaPlantilla/popup/configurarFirmaDocumento.xhtml"></ui:include> -->
+		<ui:include src="/comun/mensajeConfirmacionEstandar.xhtml"></ui:include>
+<!-- 		<ui:include src="/protected/firmaDigital/popup/firmarDigitalmenteDocumento.xhtml"></ui:include> -->
+	</ui:define>
+
+</ui:composition>

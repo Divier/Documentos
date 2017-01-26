@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+   <h:form prependId="false">
+      <p:idleMonitor
+         timeout="#{session.maxInactiveInterval * 1000}"
+         onidle="startIdleMonitor()" />
+ 
+      <p:dialog id="timeoutSession"
+         header="#{labelGeneral.session_expire}"
+         widgetVar="timeoutDialog"
+         showEffect="fade" hideEffect="fade"
+         modal="true"
+         width="400"
+         height="110"
+         closable="false"
+         draggable="false"
+         resizable="false"
+         appendTo="@(body)">
+         <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 8px 8px 0;"/>
+            <p:panel>
+               #{labelGeneral.session_expire}
+            </p:panel>
+         </p>
+			<h:panelGrid columns="3" cellspacing="1" styleClass="center-block">
+				<p:commandButton value="#{labelGeneral.boton_cerrar}"
+					onclick="PF('timeoutDialog').hide();redirect();"
+					process="@this">
+				</p:commandButton>
+			</h:panelGrid>
+      </p:dialog>
+   </h:form>
+   <script type="text/javascript">
+      var processTimer;
+      var redirectPage = "#{request.contextPath}/protected/index.xhtml";
+ 
+      function startIdleMonitor() {
+        PF('timeoutDialog').show();
+      }
+      function redirect() {
+          window.location.href = redirectPage;
+          return;
+      }
+      </script>
+</ui:composition>

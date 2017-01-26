@@ -1,0 +1,20 @@
+.grupo {
+    padding: 8px;
+    margin: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 1px #fff inset, 0 -1px 0px #ccc inset;
+	background: url("#{resource['img:icons/news.png']}") 0px 0px
+		repeat-x;
+}
+.grupo-content {
+    box-shadow: 0 1px 1px #ddd inset;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background: #fff;
+    padding: 0 8px;
+}
+.grupo img {
+    width:200px;
+    height:100px;
+}

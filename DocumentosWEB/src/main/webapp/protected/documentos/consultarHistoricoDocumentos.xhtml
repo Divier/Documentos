@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+
+	<ui:define name="contenido">
+		<h:form id="form-contenido">
+			<p:panel id="campos-consulta" styleClass="panel-formulario"
+				header="#{labelDocumentos.documentos}">
+				<p:fieldset styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_consultar}">
+
+					<h:panelGrid id="panel-formulario" styleClass="center-block"
+						columns="4"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<p:outputLabel value="#{labelDocumentos.consecutivo_documento} " />
+						<h:panelGroup>
+							<p:inputText id="txtConsecutivo" maxlength="20"
+								value="#{consultarHistoricoDocumentosMB.consecutivo}"
+								converterMessage="#{labelGeneral.msg_convertir_numero_error}" />
+							<p:message for="txtConsecutivo" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{labelDocumentos.descripcion_documento} " />
+						<h:panelGroup>
+							<p:inputText id="txtDescripcionDocumento" maxlength="300"
+								value="#{consultarHistoricoDocumentosMB.descripcionDocumento}" />
+							<p:message for="txtDescripcionDocumento" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calFechaCreaDocInicial"
+							value="#{labelDocumentos.fecha_creacion_doc_inicial}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultarHistoricoDocumentosMB.fechaCreaDocInicial}"
+								id="calFechaCreaDocInicial" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calFechaCreaDocInicial"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calFechaCreaDocInicial" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calFechaCreaDocFinal"
+							value="#{labelDocumentos.fecha_creacion_doc_final}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultarHistoricoDocumentosMB.fechaCreaDocFinal}"
+								id="calFechaCreaDocFinal" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calFechaCreaDocFinal"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calFechaCreaDocFinal" />
+						</h:panelGroup>
+
+					</h:panelGrid>
+
+					<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+						<p:commandButton id="btnConsultar" styleClass="_op-CONSULTAR"
+							action="#{consultarHistoricoDocumentosMB.consultar}"
+							icon="c2-icon-consultar" process="@form"
+							value="#{lbComun.btnConsultar}"
+							rendered="#{menuMB.validarOperacion('historico_documentos','consultar')}"
+							update=":messages :form-resultado :form-contenido">
+							<p:tooltip for="btnConsultar" value="#{lbComun.btnConsultar}" />
+						</p:commandButton>
+					</h:panelGrid>
+
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+		<h:form id="form-resultado">
+			<p:panel header="#{labelGeneral.titulo_resultados_consulta}"
+				toggleable="true"
+				rendered="#{consultarHistoricoDocumentosMB.lstDocumentoDTOs.size()==0 and consultarHistoricoDocumentosMB.tablaVisible}">
+				<p:outputLabel value="#{labelGeneral.no_hay_registros_tabla}" />
+			</p:panel>
+			<p:panel id="resultado-consulta" styleClass="panel-res-consulta"
+				rendered="#{consultarHistoricoDocumentosMB.lstDocumentoDTOs.size() > 0}">
+
+				<h:panelGrid id="acciones-top">
+					<f:facet name="footer">
+						<p:commandButton id="btnVer" styleClass="_op-EDITAR"
+							action="#{visualizarDocumentoMB.generarDocumento()}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelGeneral.tooltip_visualizar_documento}"
+							disabled="#{consultarHistoricoDocumentosMB.documentoSeleccionado==null}">
+							<f:setPropertyActionListener
+								target="#{visualizarDocumentoMB.documentoVisualizar}"
+								value="#{consultarHistoricoDocumentosMB.documentoSeleccionado}" />
+							<p:tooltip for="btnVer"
+								value="#{labelGeneral.tooltip_visualizar_documento}" />
+						</p:commandButton>
+						<p:commandButton id="btnFirmar" styleClass="_op-EDITAR"
+							icon="c2-icon-editar" process="@this" rendered="false"
+							value="#{labelDocumentos.firmar_digitalmente_documento}"
+							disabled="#{consultarHistoricoDocumentosMB.documentoSeleccionado==null}">
+							<p:tooltip for="btnFirmar"
+								value="#{labelDocumentos.firmar_digitalmente_documento}" />
+						</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+
+				<p:dataTable id="tabla-resultados"
+					value="#{consultarHistoricoDocumentosMB.lstDocumentoDTOs}"
+					var="registro" rowKey="#{registro.idDocumento}"
+					selection="#{consultarHistoricoDocumentosMB.documentoSeleccionado}"
+					paginator="true"
+					paginatorTemplate="#{webPrm.param_paginator_template}"
+					rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+					rows="#{webPrm.param_initial_rows}" sortMode="multiple">
+
+					<p:ajax event="rowSelectRadio"
+						process=":form-resultado:tabla-resultados"
+						update=":form-resultado:acciones-top" global="false" />
+
+					<p:column selectionMode="single" />
+
+					<p:column sortBy="#{registro.consecutivoDocumento}">
+						<f:facet name="header">
+							<h:outputText value="#{labelDocumentos.consecutivo_documento}" />
+						</f:facet>
+						<h:outputText value="#{registro.consecutivoDocumento}" />
+					</p:column>
+
+					<p:column sortBy="#{registro.descripcionDocumento}">
+						<f:facet name="header">
+							<h:outputText value="#{labelDocumentos.descripcion_documento}" />
+						</f:facet>
+						<h:outputText value="#{registro.descripcionDocumento}" />
+					</p:column>
+
+					<p:column headerText="#{labelDocumentos.version_documento}"
+						sortBy="#{registro.versionDocumento}">
+						<h:outputText value="#{registro.versionDocumento}" />
+					</p:column>
+
+					<p:column headerText="#{labelDocumentos.fecha_creacion_documento}"
+						sortBy="#{registro.fechaCreacion}">
+						<c2:outputDateLabel labelValue="#{registro.fechaCreacion}"
+							fullFormat="true" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+		<ui:include
+			src="/protected/documentos/popup/popupVisualizarDocumento.xhtml"></ui:include>
+
+	</ui:define>
+
+</ui:composition>

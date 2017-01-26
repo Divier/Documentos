@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="DocumentosJPA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/DocumentosSqlDS</jta-data-source>
+		<class>co.com.datatools.documentos.entidades.Cargo</class>
+		<class>co.com.datatools.documentos.entidades.ContextoAplicacionVariable</class>
+		<class>co.com.datatools.documentos.entidades.PlantillaConfiguracion</class>
+		<class>co.com.datatools.documentos.entidades.Documento</class>
+		<class>co.com.datatools.documentos.entidades.FirmaDigitalDocumento</class>
+		<class>co.com.datatools.documentos.entidades.FirmaPlantilla</class>
+		<class>co.com.datatools.documentos.entidades.Formato</class>
+		<class>co.com.datatools.documentos.entidades.Funcionario</class>
+		<class>co.com.datatools.documentos.entidades.FuncionarioCargo</class>
+		<class>co.com.datatools.documentos.entidades.JasperPlantilla</class>
+		<class>co.com.datatools.documentos.entidades.ParametroSistema</class>
+		<class>co.com.datatools.documentos.entidades.Plantilla</class>
+		<class>co.com.datatools.documentos.entidades.Proceso</class>
+		<class>co.com.datatools.documentos.entidades.TipoDato</class>
+		<class>co.com.datatools.documentos.entidades.TipoFechaReferencia</class>
+		<class>co.com.datatools.documentos.entidades.TipoFirmaPlantilla</class>
+		<class>co.com.datatools.documentos.entidades.TipoVariable</class>
+		<class>co.com.datatools.documentos.entidades.UsuarioOrganizacion</class>
+		<class>co.com.datatools.documentos.entidades.Variable</class>
+		<class>co.com.datatools.documentos.entidades.XmlDocumento</class>
+		<class>co.com.datatools.documentos.entidades.XmlPlantilla</class>
+		<class>co.com.datatools.documentos.entidades.tmp.seguridad.Rol</class>
+		
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
+			<!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

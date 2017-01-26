@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet library="webjars"
+		name="bootstrap-btsp/3.0.1/css/btsp.css" />
+
+	<h:outputStylesheet library="webjars" name="c2/css/c2.css" />
+
+	<h:outputStylesheet library="css" name="static/layout-documentos.css" />
+	<h:outputStylesheet library="css" name="documentos.css" />
+
+	<h:outputScript library="webjars"
+		name="bootstrap-btsp/3.0.1/js/bootstrap.js" />
+
+</h:head>
+<h:body>
+	<h:form id="frmConsultarFuncionario">
+		<p:panel id="campos-consulta" styleClass="panel-formulario"
+			header="#{labelAdmin.titulo_consultar_funcionarios}">
+			<p:fieldset styleClass="fieldset-formulario"
+				legend="#{lbComun.msg_fieldset_consultar}">
+
+				<!-- FILTROS DE BUSQUEDA -->
+				<h:panelGrid id="panel-formulario" styleClass="center-block"
+					columns="4" columnClasses="label-col,input-col,label-col,input-col">
+					
+					<p:outputLabel value="#{labelAdmin.label_tipo_documento_funcionario}" />
+						<h:panelGroup>
+							<p:selectOneMenu
+								value="#{funcionarioMB.funcionarioConsulta.funcionarioDTO.siglaTipoIdentificacion}"
+								id="selOneMenTipoIdentificacion">
+								<f:selectItem itemLabel="#{labelGeneral.label_select}" itemValue="" />
+								<f:selectItems value="#{catalogoMB.lstTipoIdentificacion}" />
+							</p:selectOneMenu>
+							<p:message for="selOneMenTipoIdentificacion" />
+					</h:panelGroup>
+					<p:outputLabel value="#{labelAdmin.label_documento_funcionario}"></p:outputLabel>
+					<p:inputText maxlength="20"
+						value="#{funcionarioMB.funcionarioConsulta.funcionarioDTO.numeroDocumIdent}"></p:inputText>
+
+					<p:outputLabel value="#{labelAdmin.label_nombre_funcionario}"></p:outputLabel>
+					<p:inputText maxlength="125"
+						value="#{funcionarioMB.funcionarioConsulta.funcionarioDTO.nombreFuncionario}"></p:inputText>
+				</h:panelGrid>
+
+				<!-- BOTONES -->
+				<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+					<f:facet name="footer">
+						<p:commandButton id="btnConsultar" styleClass="_op-CONSULTAR"
+							action="#{funcionarioMB.consultarFuncionarios()}"
+							icon="c2-icon-consultar" process="@form"
+							value="#{lbComun.btnConsultar}"
+							update=":form-resultado-funcionarios">
+							<p:tooltip for="btnConsultar" value="#{lbComun.btnConsultar}" />
+						</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+			</p:fieldset>
+		</p:panel>
+	</h:form>
+
+	<h:form id="form-resultado-funcionarios">
+		<p:panel header="#{labelGeneral.titulo_resultados_consulta}"
+			toggleable="true"
+			rendered="#{funcionarioMB.funcionariosResultado.size() == 0 and funcionarioMB.consultaRealizada}">
+			<p:outputLabel value="#{labelGeneral.no_hay_registros_tabla}" />
+		</p:panel>
+		<p:panel id="panelResultadosFuncionarios"
+			styleClass="panel-res-consulta"
+			header="#{labelGeneral.titulo_resultados_consulta}" toggleable="true"
+			rendered="#{funcionarioMB.funcionariosResultado.size() > 0}">
+			<h:panelGrid id="panelBotonesFuncionarios" columns="1">
+				<f:facet name="footer">
+					<p:commandButton styleClass="_op-EDITAR" action="#{funcionarioMB.seleccionarFuncionarioPopup()}"
+						value="#{labelAdmin.btn_seleccionar}" icon="ui-icon-star"
+						disabled="#{funcionarioMB.funcionarioSeleccionado==null}" />
+				</f:facet>
+			</h:panelGrid>
+			<p:dataTable id="tablaResultadosFuncionarios"
+				value="#{funcionarioMB.funcionariosResultado}" var="funcionario"
+				rowKey="#{funcionario.idFuncionario}"
+				paginatorTemplate="#{webPrm.param_paginator_template}"
+				paginator="true" rows="#{webPrm.param_initial_rows}"
+				selection="#{funcionarioMB.funcionarioSeleccionado}"
+				rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+				sortMode="multiple">
+				<p:ajax event="rowSelectRadio"
+					update=":form-resultado-funcionarios:panelBotonesFuncionarios"
+					process=":form-resultado-funcionarios:tablaResultadosFuncionarios"></p:ajax>
+				<p:column selectionMode="single" />
+				<p:column
+					headerText="#{labelAdmin.label_tipo_identificacion_funcionario}"
+					sortBy="#{funcionario.nombreTipoIdentificacion}">
+					<p:outputLabel
+						value="#{funcionario.siglaTipoIdentificacion} - #{funcionario.nombreTipoIdentificacion}"></p:outputLabel>
+				</p:column>
+				<p:column headerText="#{labelAdmin.label_documento_funcionario}"
+					sortBy="#{funcionario.numeroDocumIdent}">
+					<p:outputLabel value="#{funcionario.numeroDocumIdent}"></p:outputLabel>
+				</p:column>
+				<p:column headerText="#{labelAdmin.label_nombre_funcionario}"
+					sortBy="#{funcionario.nombreFuncionario}">
+					<p:outputLabel value="#{funcionario.nombreFuncionario}"></p:outputLabel>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+</h:body>
+</html>

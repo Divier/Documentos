@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Documentos</title>
+
+		<h:outputStylesheet library="webjars"
+			name="bootstrap-btsp/3.0.1/css/btsp.css" />
+
+		<h:outputStylesheet library="webjars" name="c2/css/c2.css" />
+
+		<h:outputStylesheet library="css" name="static/layout-documentos.css" />
+		<h:outputStylesheet library="css" name="documentos.css" />
+
+		<h:outputScript library="webjars"
+			name="bootstrap-btsp/3.0.1/js/bootstrap.js" />
+
+		<ui:insert name="headIncludes" />
+	</h:head>
+	<h:body>
+
+		<div id="wrapper">
+			<header class="btsp">
+			<div id="c2-header" role="navigation"
+				class="navbar navbar-default navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button data-target=".navbar-collapse" data-toggle="collapse"
+							class="navbar-toggle collapsed" type="button">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar" /> <span class="icon-bar" /> <span
+								class="icon-bar" />
+						</button>
+						<h1 style="color: white;">#{labelGeneral.titulo_modulo_docs}</h1>
+					</div>
+				</div>
+			</div>
+			<ui:include src="/WEB-INF/jsp/menu.xhtml" /> </header>
+
+			<section>
+			<div class="contenido">
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					globalOnly="true" />
+				<ui:insert name="contenido" />
+			</div>
+			</section>
+
+			<footer class="btsp"> <ui:include
+				src="/WEB-INF/layouts/footer.xhtml" /> </footer>
+		</div>
+
+		<!-- Componentes generales - INI -->
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+
+		<p:confirmDialog id="dialogConfirm" global="true" showEffect="fade"
+			appendTo="@(body)" closeOnEscape="true" styleClass="dialog-confirm">
+			<h:form id="formDialogConfirm">
+				<h:panelGrid columns="2" cellspacing="4">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="btnConfirmYes" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="btnConfirmNo" />
+				</h:panelGrid>
+			</h:form>
+		</p:confirmDialog>
+
+		<p:dialog modal="true" widgetVar="statusDialog"
+			styleClass="status-dialog-c2" showHeader="false" draggable="false"
+			closable="false" resizable="false" appendTo="@(body)">
+			<p:graphicImage library="img" name="ajax_loader.gif" />
+		</p:dialog>
+
+		<ui:include src="/comun/expiraSesion.xhtml" />
+		<!-- Componentes generales - FIN -->
+
+	</h:body>
+</f:view>
+</html>

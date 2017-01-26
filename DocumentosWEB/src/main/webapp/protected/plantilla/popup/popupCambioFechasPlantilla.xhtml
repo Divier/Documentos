@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog modal="true" id="cambioFechasPopup"
+		widgetVar="cambioFechasPopup"
+		header="#{labelPlantillas.cambio_fechas}" draggable="false"
+		style="max-height: 75%; overflow:auto;" closable="false"
+		resizable="false" width="65%" appendTo="@(body)">
+		<h:form id="form-popup-cambio-fechas-plantilla">
+			<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+        		<p:messages id="msgs" showDetail="true" showSummary="false" globalOnly="true"/> 
+        	</h:panelGrid>
+			<p:panel id="resultado-consulta-cambio-fechas"
+				styleClass="panel-res-consulta">
+
+				<h:panelGrid columns="2" cellspacing="9" styleClass="center-block">
+					<h:outputLabel value="#{labelPlantillas.nombre_plantilla}" />
+					<h:outputText
+						value="#{consultaPlantillaMB.plantillaSeleccionadaFechas.nombrePlantilla}" />
+					<h:outputLabel value="#{labelPlantillas.proceso_plantilla}" />
+					<h:outputText
+						value="#{consultaPlantillaMB.plantillaSeleccionadaFechas.procesoDTO.nombreProceso}" />
+					<h:outputLabel value="#{labelPlantillas.version_plantilla}" />
+					<h:outputText
+						value="#{consultaPlantillaMB.plantillaSeleccionadaFechas.versionPlantilla}" />
+				</h:panelGrid>
+			</p:panel>
+			<h:panelGrid styleClass="center-block" columns="4" cellpadding="5">
+						<p:outputLabel value="#{labelPlantillas.fecha_inicio_plantilla}:" styleClass="campo-obligatorio" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaSeleccionadaFechas.fechaInicio}"
+								id="calfechaInicial" navigator="true"
+								mindate="#{consultaPlantillaMB.fecMinPlantilla}"
+								disabled="#{consultaPlantillaMB.deshabilitarCampoFecha(consultaPlantillaMB.plantillaSeleccionadaFechas.fechaInicio)}"
+								pattern="#{utilidadMB.formatoFecha}" readonlyInput="true"
+								required="true" requiredMessage="#{labelGeneral.requerido}">
+								<p:ajax event="dateSelect" process="@form" update="calfechaFinal" ></p:ajax>
+								<p:ajax event="change" process="@form" update="calfechaFinal" ></p:ajax>
+								<p:watermark for="calfechaInicial"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaInicial" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{labelPlantillas.fecha_final_plantilla}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaSeleccionadaFechas.fechaFin}"
+								id="calfechaFinal" navigator="true" readonlyInput="true"
+								mindate="#{consultaPlantillaMB.fecMinFinalPlantilla}"
+								disabled="#{consultaPlantillaMB.deshabilitarCampoFecha(consultaPlantillaMB.plantillaSeleccionadaFechas.fechaFin)}"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="dateSelect" process="@this"></p:ajax>
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calfechaFinal"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaFinal" />
+						</h:panelGroup>
+			</h:panelGrid>
+			<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+				<p:commandButton value="#{labelGeneral.boton_guardar}" update="@form msgs"
+					action="#{consultaPlantillaMB.cambiarFechasPlantilla()}">
+				</p:commandButton>
+				<p:commandButton value="#{labelGeneral.boton_volver}"
+					action="#{consultaPlantillaMB.cerrarPopupFechas()}" process="@this"></p:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</ui:composition>

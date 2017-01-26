@@ -1,0 +1,13 @@
+Módulo de fuentes para manejo de fuentes independientes de la JVM y del SO del módulo de documentos.
+
+Las fuentes (.ttf) deben ser puesto en el proyecto JasperFontsUtilities/src/main/resources/fonts.
+
+se debe configurar dichas fuentes en el archivo fonts dentro de un nuevo tag de tipo bean, los valores requeridos son, name y normal, ya que el nombre es el patro de búsqueda y el normal es el tipo de letra por defecto
+
+en el CKEditor se debe configurar la fuente opara que este disponible al usuario para la selección (case sensitive). En las líneas:
+
+editor.config.font_names = 'arial/Arial; calibri/Calibri; times/Times';
+
+var config = {
+				........
+				font_names : 'arial/Arial; calibri/Calibri; times/Times'

@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+
+	<ui:define name="contenido">
+		<h:form id="form-contenido">
+			<p:panel id="campos-consulta" styleClass="panel-formulario"
+				header="#{labelGeneral.consultar_plantillas}">
+				<p:fieldset styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_consultar}">
+
+
+					<h:panelGrid id="panel-formulario" styleClass="center-block"
+						columns="4"
+						columnClasses="label-col,input-col,label-col,input-col">
+
+
+
+						<p:outputLabel value="#{labelPlantillas.codigo_plantilla}" />
+						<h:panelGroup>
+							<p:inputText id="txtCodigo"
+								value="#{consultaPlantillaMB.plantillaConsulta.plantillaDTO.codigoPlantilla}"
+								maxlength="20" />
+							<p:message for="txtCodigo" />
+						</h:panelGroup>
+						
+						<p:outputLabel value="#{labelPlantillas.nombre_plantilla}" />
+						<h:panelGroup>
+							<p:inputText id="txtNombre"
+								value="#{consultaPlantillaMB.plantillaConsulta.plantillaDTO.nombrePlantilla}"
+								maxlength="100" />
+							<p:message for="txtNombre" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calfechaInicialDesde"
+							value="#{labelPlantillas.fecha_inicial_desde}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaConsulta.fechaInicioDesde}"
+								id="calfechaInicialDesde" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calfechaInicialDesde"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaInicialDesde" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calfechaInicialHasta"
+							value="#{labelPlantillas.fecha_inicial_hasta}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaConsulta.fechaInicioHasta}"
+								id="calfechaInicialHasta" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calfechaInicialHasta"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaInicialHasta" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calfechaFinDesde"
+							value="#{labelPlantillas.fecha_fin_desde}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaConsulta.fechaFinDesde}"
+								id="calfechaFinDesde" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calfechaFinDesde"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaFinDesde" />
+						</h:panelGroup>
+
+						<p:outputLabel for="calfechaFinHasta"
+							value="#{labelPlantillas.fecha_fin_hasta}" />
+						<h:panelGroup>
+							<p:calendar
+								value="#{consultaPlantillaMB.plantillaConsulta.fechaFinHasta}"
+								id="calfechaFinHasta" navigator="true"
+								pattern="#{utilidadMB.formatoFecha}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:watermark for="calfechaFinHasta"
+									value="#{utilidadMB.formatoFecha}" />
+							</p:calendar>
+							<p:message for="calfechaFinHasta" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{labelPlantillas.proceso_plantilla}" />
+						<h:panelGroup>
+							<p:selectOneMenu
+								value="#{consultaPlantillaMB.plantillaConsulta.plantillaDTO.procesoDTO.idProceso}"
+								id="selOneMenProceso">
+								<f:selectItem itemLabel="#{labelGeneral.label_select}"
+									itemValue="0" />
+								<f:selectItems value="#{catalogoMB.lstProceso}" />
+							</p:selectOneMenu>
+							<p:message for="selOneMenProceso" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton id="btnConsultar" styleClass="_op-CONSULTAR"
+							action="#{consultaPlantillaMB.consultar}"
+							icon="c2-icon-consultar" process="@form"
+							value="#{lbComun.btnConsultar}"
+							update=":messages :form-resultado :form-contenido">
+							<p:tooltip for="btnConsultar" value="#{lbComun.btnConsultar}" />
+						</p:commandButton>
+						<p:commandButton id="btnCrear" styleClass="_op-CREAR"
+							action="#{consultaPlantillaMB.registrarPlantilla}" icon="c2-icon-crear" process="@this"
+							value="#{lbComun.btnCrear}" immediate="true">
+							<p:tooltip for="btnCrear" value="#{lbComun.btnCrear}" />
+						</p:commandButton>
+					</h:panelGrid>
+
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+		<h:form id="form-resultado">
+			<p:panel header="#{labelGeneral.titulo_resultados_consulta}"
+				toggleable="true"
+				rendered="#{consultaPlantillaMB.plantillas.size()==0 and consultaPlantillaMB.mostrarTabla}">
+				<p:outputLabel value="#{labelGeneral.no_hay_registros_tabla}" />
+			</p:panel>
+			<p:panel id="resultado-consulta" styleClass="panel-res-consulta"
+				rendered="#{consultaPlantillaMB.plantillas.size() > 0}">
+
+				<h:panelGrid id="acciones-top">
+					<f:facet name="footer">
+						<p:commandButton id="btnNuevaVersion" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.editarPlantilla(consultaPlantillaMB.plantillaSeleccionadaGeneral, false)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelPlantillas.crear_nueva_version}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnEditar"
+								value="#{labelPlantillas.crear_nueva_version}" />
+						</p:commandButton>
+						<p:commandButton id="btnEditar" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.editarPlantilla(consultaPlantillaMB.plantillaSeleccionadaGeneral, true)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{lbComun.btnEditar}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnEditar" value="#{lbComun.btnEditar}" />
+						</p:commandButton>
+						<p:commandButton id="btnVisualizar" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.visualizar(consultaPlantillaMB.plantillaSeleccionadaGeneral)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelGeneral.tooltip_visualizar}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnVisualizar"
+								value="#{labelGeneral.tooltip_visualizar}" />
+						</p:commandButton>
+						<p:commandButton id="btnCambiarFechas" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.verPopupCambioFechas(consultaPlantillaMB.plantillaSeleccionadaGeneral)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelPlantillas.tooltip_cambiar_fechas_vigencia}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnCambiarFechas"
+								value="#{labelPlantillas.tooltip_cambiar_fechas_vigencia}" />
+						</p:commandButton>
+						<p:commandButton id="btnCrearVariable" styleClass="_op-EDITAR"
+							update=":dgcrearVariable"
+							action="#{crearVariablePlantillaMB.cargarPlantilla()}"
+							oncomplete="PF('popupCrearVariable').show()"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelGeneral.tooltip_crear_variables}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<f:setPropertyActionListener
+								target="#{crearVariablePlantillaMB.plantillaSesion}"
+								value="#{consultaPlantillaMB.plantillaSeleccionadaGeneral}" />
+							<p:tooltip for="btnCrearVariable"
+								value="#{labelGeneral.tooltip_crear_variables}" />
+						</p:commandButton>
+						<p:commandButton id="btnVerDet" styleClass="_op-EDITAR"
+							update=":historicoDialog"
+							action="#{consultaPlantillaMB.verHistorico()}"
+							icon="c2-icon-detalle" process="@this"
+							value="#{lbComun.btnVerDet}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnVerDet" value="#{lbComun.btnVerDet}" />
+						</p:commandButton>
+						<p:commandButton id="btnEliminar" styleClass="_op-ELIMINAR"
+							action="#{consultaPlantillaMB.eliminar(consultaPlantillaMB.plantillaSeleccionadaGeneral, false)}"
+							icon="c2-icon-eliminar" process="@this"
+							value="#{lbComun.btnEliminar}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaGeneral==null}">
+							<p:tooltip for="btnEliminar" value="#{lbComun.btnEliminar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_eliminar}" icon="ui-icon-alert" />
+						</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+
+				<p:dataTable id="tabla-resultados"
+					value="#{consultaPlantillaMB.plantillas}" var="registro"
+					rowKey="#{registro.idPlantilla}"
+					selection="#{consultaPlantillaMB.plantillaSeleccionadaGeneral}"
+					paginator="true"
+					paginatorTemplate="#{webPrm.param_paginator_template}"
+					rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+					rows="#{webPrm.param_initial_rows}" sortMode="multiple">
+
+					<p:ajax event="rowSelectRadio"
+						process=":form-resultado:tabla-resultados"
+						update=":form-resultado:acciones-top" global="false" />
+
+					<p:column selectionMode="single" />
+
+					<p:column headerText="#{labelPlantillas.codigo_plantilla}"
+						sortBy="#{registro.codigoPlantilla}">
+						<h:outputText value="#{registro.codigoPlantilla}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.nombre_plantilla}"
+						sortBy="#{registro.nombrePlantilla}">
+						<h:outputText value="#{registro.nombrePlantilla}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.proceso_plantilla}"
+						sortBy="#{registro.procesoDTO.nombreProceso}">
+						<h:outputText value="#{registro.procesoDTO.nombreProceso}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.fecha_creacion_plantilla}"
+						sortBy="#{registro.fechaCreacion}">
+						<c2:outputDateLabel labelValue="#{registro.fechaCreacion}"
+							fullFormat="true" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.fecha_inicio_plantilla}"
+						sortBy="#{registro.fechaInicio}">
+						<c2:outputDateLabel labelValue="#{registro.fechaInicio}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.fecha_final_plantilla}"
+						sortBy="#{registro.fechaFin}">
+						<c2:outputDateLabel labelValue="#{registro.fechaFin}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.version_plantilla}"
+						sortBy="#{registro.versionPlantilla}">
+						<h:outputText value="#{registro.versionPlantilla}" />
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		<ui:include
+			src="/protected/documentos/popup/popupVisualizarDocumento.xhtml"></ui:include>
+		<ui:include
+			src="/protected/plantilla/popup/popupHistoricoPlantilla.xhtml" />
+		<ui:include
+			src="/protected/variable/popup/crearVariablePlantilla.xhtml" />
+		<ui:include
+			src="/protected/plantilla/popup/popupCambioFechasPlantilla.xhtml" />
+	</ui:define>
+</ui:composition>

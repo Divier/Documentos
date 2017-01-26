@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog modal="true" id="historicoDialog" widgetVar="historicoDialog"
+		header="#{labelPlantillas.historico}" draggable="false" style="max-height: 80%; overflow:auto;"
+		closable="false" resizable="false" width="80%" appendTo="@(body)">
+		<h:form id="form-popup-historico-plantilla">
+			<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+        		<p:messages id="msgs" showDetail="true" showSummary="false" globalOnly="true"/> 
+        	</h:panelGrid>
+			<p:panel id="resultado-consulta" styleClass="panel-res-consulta"
+				rendered="#{consultaPlantillaMB.plantillasHistorico.size() > 0}">
+
+				<h:panelGrid columns="2" cellspacing="9" styleClass="center-block">
+					<h:outputLabel value="#{labelPlantillas.nombre_plantilla}" />
+					<h:outputText value="#{consultaPlantillaMB.plantillaSeleccionadaGeneral.nombrePlantilla}" />
+					<h:outputLabel value="#{labelPlantillas.proceso_plantilla}" />
+					<h:outputText value="#{consultaPlantillaMB.plantillaSeleccionadaGeneral.procesoDTO.nombreProceso}" />
+				</h:panelGrid>
+
+				<h:panelGrid id="acciones-top">
+					<f:facet name="footer">
+						<p:commandButton id="btnNuevaVersion" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.editarPlantilla(consultaPlantillaMB.plantillaSeleccionadaHistorico, false)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelPlantillas.crear_nueva_version}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}">
+							<p:tooltip for="btnNuevaVersion" value="#{labelPlantillas.crear_nueva_version}" />
+						</p:commandButton>
+						<p:commandButton id="btnEditar" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.editarPlantilla(consultaPlantillaMB.plantillaSeleccionadaHistorico, true)}"
+							icon="c2-icon-editar" process="@this" update="msgs"
+							value="#{lbComun.btnEditar}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}">
+							<p:tooltip for="btnEditar" value="#{lbComun.btnEditar}" />
+						</p:commandButton>
+						<p:commandButton id="btnVisualizar" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.visualizar(consultaPlantillaMB.plantillaSeleccionadaHistorico)}"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelGeneral.tooltip_visualizar}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}">
+							<p:tooltip for="btnVisualizar"
+								value="#{labelGeneral.tooltip_visualizar}" />
+						</p:commandButton>
+						<p:commandButton id="btnCambiarFechas" styleClass="_op-EDITAR"
+							action="#{consultaPlantillaMB.verPopupCambioFechas(consultaPlantillaMB.plantillaSeleccionadaHistorico)}"
+							icon="c2-icon-editar" process="@this" update="msgs"
+							value="#{labelPlantillas.tooltip_cambiar_fechas_vigencia}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}">
+							<p:tooltip for="btnCambiarFechas"
+								value="#{labelPlantillas.tooltip_cambiar_fechas_vigencia}" />
+						</p:commandButton>
+						<p:commandButton id="btnCrearVariable" styleClass="_op-EDITAR"
+							update=":dgcrearVariable"
+							action="#{crearVariablePlantillaMB.cargarPlantilla()}"
+							oncomplete="PF('popupCrearVariable').show()"
+							icon="c2-icon-editar" process="@this"
+							value="#{labelGeneral.tooltip_crear_variables}"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}">
+							<f:setPropertyActionListener
+								target="#{crearVariablePlantillaMB.plantillaSesion}"
+								value="#{consultaPlantillaMB.plantillaSeleccionadaHistorico}" />
+							<p:tooltip for="btnCrearVariable"
+								value="#{labelGeneral.tooltip_crear_variables}" />
+						</p:commandButton>
+						<p:commandButton id="btnEliminar" styleClass="_op-ELIMINAR" 
+							action="#{consultaPlantillaMB.eliminar(consultaPlantillaMB.plantillaSeleccionadaHistorico, true)}" 
+							icon="c2-icon-eliminar" process="@this" value="#{lbComun.btnEliminar}"
+							update="msgs"
+							disabled="#{consultaPlantillaMB.plantillaSeleccionadaHistorico==null}" >
+							<p:tooltip for="btnEliminar" value="#{lbComun.btnEliminar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}" message="#{lbComun.msg_confirm_eliminar}" icon="ui-icon-alert" />
+						</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+
+				<p:dataTable id="tabla-resultados"
+					value="#{consultaPlantillaMB.plantillasHistorico}" var="registro"
+					rowKey="#{registro.versionPlantilla}"
+					selection="#{consultaPlantillaMB.plantillaSeleccionadaHistorico}"
+					paginator="true"
+					paginatorTemplate="#{webPrm.param_paginator_template}"
+					rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+					rows="#{webPrm.param_initial_rows}" sortMode="multiple">
+
+					<p:ajax event="rowSelectRadio"
+						process=":form-popup-historico-plantilla:tabla-resultados"
+						update=":form-popup-historico-plantilla:acciones-top" global="false" />
+
+					<p:column selectionMode="single" />
+
+					<p:column headerText="#{labelPlantillas.fecha_creacion_plantilla}"
+						sortBy="#{registro.fechaCreacion}">
+						<c2:outputDateLabel labelValue="#{registro.fechaCreacion}" fullFormat="true" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.fecha_inicio_plantilla}"
+						sortBy="#{registro.fechaInicio}">
+						<c2:outputDateLabel labelValue="#{registro.fechaInicio}" />						
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.fecha_final_plantilla}"
+						sortBy="#{registro.fechaFin}">
+						<c2:outputDateLabel labelValue="#{registro.fechaFin}" />
+					</p:column>
+
+					<p:column headerText="#{labelPlantillas.version_plantilla}"
+						sortBy="#{registro.versionPlantilla}" width="8%">
+						<h:outputText value="#{registro.versionPlantilla}" />
+					</p:column>
+
+				</p:dataTable>
+				<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+					<p:commandButton value="#{labelGeneral.boton_cerrar}"
+						onclick="PF('historicoDialog').hide();" process="@this">
+					</p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</p:dialog>
+</ui:composition>

@@ -1,0 +1,116 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<h:outputScript library="js" name="jquery-ui.js"></h:outputScript>
+	<h:outputScript library="js" name="/ckeditor/ckeditor.js"></h:outputScript>
+	<h:outputStylesheet name="plantilla.css" library="css"></h:outputStylesheet>
+	<h:outputScript library="js" name="mustache.js"></h:outputScript>
+	<h:outputScript library="js" name="moment.min.js"></h:outputScript>
+	<h:outputScript library="js" name="moment-jdateformatparser.js"></h:outputScript>
+	<h:outputScript library="js" name="documentos.js"></h:outputScript>
+	<h:outputScript library="js" name="labels.js"></h:outputScript>
+	<h:outputScript library="js" name="properties.js"></h:outputScript>
+	<h:outputScript library="js" name="plantillas.js" charset="UTF-8"></h:outputScript>
+	
+	<ui:include src="/protected/plantilla/include/templateProperties.xhtml"></ui:include>
+	<h:form id="areaTrabajoForm" enctype="multipart/form-data">
+
+		<div class="pnlFormArea">
+			<fieldset class="fieFormArea">
+
+				<p:tabView scrollable="false" widgetVar="tabView"
+					onTabChange="Documentos.Plantillas.processHtml();"
+					onTabShow="Documentos.Plantillas.onShowGroupTab();" id="tabs"
+					value="#{registraPlantillaMB.tabs}" var="grupo">
+					<p:tab title="#{grupo.nombreTab}" disabled="#{grupo.disabled}">
+						<div id="workArea-#{grupo.idTab}" class="workArea"
+							tab="#{grupo.idTab}">
+							<div id="titulo" class="band" style="height: 0cm; display: none">
+								<p class="bandName">#{labelPlantillas.titulo}</p>
+								<div id="titulo_content-#{grupo.idTab}" class="band_content"
+									contenteditable="true" customTitle="#{labelPlantillas.titulo}"></div>
+							</div>
+							<div id="encabezado" class="band"
+								style="height: 3cm; max-height: 6cm;">
+								<p class="bandName">#{labelPlantillas.encabezado}</p>
+								<div id="encabezado_content-#{grupo.idTab}" class="band_content"
+									contenteditable="true"
+									customTitle="#{labelPlantillas.encabezado}"></div>
+							</div>
+							<div id="cuerpo" class="band" style="height: 8cm;">
+								<p class="bandName">#{labelPlantillas.cuerpo}</p>
+								<div id="cuerpo_content-#{grupo.idTab}" class="band_content"
+									contenteditable="true" customTitle="#{labelPlantillas.cuerpo}"></div>
+							</div>
+							<div id="piePagina" class="band"
+								style="height: 3cm; max-height: 6cm;">
+								<p class="bandName">#{labelPlantillas.pie_pagina}</p>
+								<div id="piePagina_content-#{grupo.idTab}" class="band_content"
+									contenteditable="true"
+									customTitle="#{labelPlantillas.pie_pagina}"></div>
+							</div>
+							<div id="ultimoPiePagina" class="band"
+								style="height: 0cm; display: none">
+								<p class="bandName">#{labelPlantillas.pie_ultima_pagina}</p>
+								<div id="ultimoPiePagina_content-#{grupo.idTab}"
+									class="band_content" contenteditable="true"
+									customTitle="#{labelPlantillas.pie_ultima_pagina}"></div>
+
+							</div>
+						</div>
+						<h:inputHidden id="xmlPlantilla"
+							value="#{grupo.contenidoXmlPlantilla}" />
+						<h:inputHidden id="disabled" value="#{grupo.disabled}" />
+					</p:tab>
+				</p:tabView>
+				<h:inputHidden id="variables"
+					value="#{registraPlantillaMB.variables}" />
+				<h:inputHidden id="numeroGrupo"
+					value="#{registraPlantillaMB.numeroGrupo}" />
+				<p:commandButton id="verGrupo" process="@form"
+					action="#{registraPlantillaMB.verGrupo()}" value="" update="tabs"
+					styleClass="hidden" />
+				<p:commandButton id="verFirma" process="@form"
+					onclick="PF('popupConfigurarFirmaDocumento').show();" value=""
+					update="@this" styleClass="hidden">
+					<f:setPropertyActionListener
+						target="#{configurarFirmaDocumentoMB.plantillaSesion}"
+						value="#{registraPlantillaMB.plantillaDTO}" />
+					<f:setPropertyActionListener
+						target="#{configurarFirmaDocumentoMB.lVariableDTOs}"
+						value="#{registraPlantillaMB.lVariableDTOs}" />
+				</p:commandButton>
+
+				<h:panelGrid columns="3" cellspacing="7" styleClass="center-block">
+					<p:commandButton id="preliminar"
+						onclick="Documentos.Plantillas.onPreview(event)" process="@form"
+						actionListener="#{registraPlantillaMB.preliminar}"
+						value="#{labelPlantillas.boton_vista_preliminar}"
+						update=":messages @this" />
+					<p:commandButton id="guardar"
+						action="#{registraPlantillaMB.guardar}"
+						onclick="Documentos.Plantillas.onSave(event)"
+						value="#{labelGeneral.boton_guardar}" process="@all"
+						update="@this" />
+					<p:commandButton id="volver" oncomplete=""
+						value="#{labelGeneral.boton_volver}" />
+				</h:panelGrid>
+			</fieldset>
+		</div>
+		<ui:include src="/protected/plantilla/include/utilPlantilla.xhtml"></ui:include>
+
+	</h:form>
+	<ui:include
+		src="/protected/firmaPlantilla/popup/configurarFirmaDocumento.xhtml"></ui:include>
+	<ui:include
+		src="/protected/documentos/popup/popupVisualizarDocumento.xhtml"></ui:include>
+	<!-- 	<ui:include src="/comun/mensajeConfirmacionEstandar.xhtml"></ui:include> -->
+
+</ui:composition>

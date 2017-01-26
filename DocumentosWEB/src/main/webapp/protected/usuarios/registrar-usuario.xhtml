@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+	<ui:define name="contenido">
+		<h:form id="form-contenido-regUsuario">
+			<p:panel id="campos-consulta" styleClass="panel-formulario"
+				header="#{labelAdmin.titulo_registrar_usuarios}">
+				<p:fieldset styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_registro}">
+					<!-- DATOS DE REGISTRO -->
+					<h:panelGrid id="panel-formulario" styleClass="center-block"
+						columns="4"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<p:outputLabel value="#{labelAdmin.label_nombre_usuario}"
+							styleClass="campo-obligatorio"></p:outputLabel>
+						<h:panelGroup>
+							<p:inputText id="txtLoginUsuario" maxlength="16" required="true"
+								value="#{usuariosRegistroMB.usuarioRegistroDTO.loginUsuario}"
+								requiredMessage="#{labelGeneral.requerido}"
+								validatorMessage="#{labelAdmin.msg_formato_usuario_invalido}">
+						  <f:validateRegex
+							pattern="^[-._a-zA-Z0-9Ññ]+" />
+							</p:inputText>
+							<p:message for="txtLoginUsuario"></p:message>
+						</h:panelGroup>
+						<p:outputLabel value="#{labelAdmin.label_funcionario}" styleClass="campo-obligatorio"/>
+						<h:panelGroup>
+							<h:panelGrid columns="4">
+								<h:panelGroup>
+									<p:inputText readonly="true" id="txtNombreFuncionario" requiredMessage="#{labelGeneral.requerido}"
+										value="#{usuariosRegistroMB.usuarioRegistroDTO.funcionarioDTO.nombreFuncionario}" maxlength="125"></p:inputText>
+									<p:message for="txtNombreFuncionario"></p:message>
+								</h:panelGroup>
+								<p:commandButton icon="ui-icon-extlink" process="@this"
+									actionListener="#{usuariosRegistroMB.verPopupFuncionarios()}">
+									<p:ajax event="dialogReturn"
+										listener="#{usuariosRegistroMB.onFuncionarioSeleccionado}"
+										update=":form-contenido-regUsuario:txtNombreFuncionario"></p:ajax>
+								</p:commandButton>
+							</h:panelGrid>
+						</h:panelGroup>
+						<p:outputLabel value="#{labelGeneral.contrasena}"
+							styleClass="campo-obligatorio"></p:outputLabel>
+						<h:panelGroup>
+							<p:password id="psw" match="psw2"
+								value="#{usuariosRegistroMB.usuarioRegistroDTO.contrasena}"
+								required="true" requiredMessage="#{labelGeneral.requerido}">
+							</p:password>
+							<p:message for="psw"></p:message>
+						</h:panelGroup>
+						<p:outputLabel value="#{labelAdmin.label_confirmar_psw}"
+							styleClass="campo-obligatorio"></p:outputLabel>
+						<h:panelGroup>
+							<p:password id="psw2"
+								value="#{usuariosRegistroMB.usuarioRegistroDTO.contrasena}"
+								required="true" requiredMessage="#{labelGeneral.requerido}"
+								validatorMessage="#{labelAdmin.msg_longitud_contrasena}">
+								<f:validateLength minimum="8" maximum="16" for="psw"/>
+							</p:password>
+							<p:message for="psw2"></p:message>
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<!-- ROLES -->
+					<h:panelGrid id="panel-roles" styleClass="center-block" columns="1">
+						<p:dataTable value="#{usuariosRegistroMB.rolesSistema}" var="rol"
+							selection="#{usuariosRegistroMB.rolesUsuario}"
+							paginatorTemplate="#{webPrm.param_paginator_template}"
+							paginator="true"
+							rowsPerPageTemplate="#{webPrm.param_rows_per_page}"
+							rows="#{webPrm.param_initial_rows}" rowKey="#{rol.idRol}">
+							<f:facet name="header">
+								<p:outputLabel value="#{labelAdmin.label_roles}"></p:outputLabel>
+							</f:facet>
+							<p:column selectionMode="multiple"></p:column>
+							<p:column headerText="#{labelAdmin.label_nombre_rol}"
+								sortBy="#{rol.nombre}">
+								<p:outputLabel value="#{rol.nombre}"></p:outputLabel>
+							</p:column>
+							<p:column headerText="#{labelAdmin.label_descripcion_rol}"
+								sortBy="#{rol.descripcion}">
+								<p:outputLabel value="#{rol.descripcion}"></p:outputLabel>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+
+					<!-- BOTONES -->
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton id="btnRegistrar" styleClass="_op-CONSULTAR"
+							action="#{usuariosRegistroMB.registrarUsuario()}"
+							icon="c2-icon-cancelar" process="@form"
+							value="#{lbComun.btnGuardar}"
+							update=":messages :form-contenido-regUsuario">
+							<p:tooltip for="btnRegistrar" value="#{lbComun.btnGuardar}" />
+						</p:commandButton>
+						<p:commandButton id="btnCancelar" styleClass="_op-CONSULTAR"
+							action="/protected/usuarios/consultar-usuarios"
+							icon="c2-icon-crear" process="@this"
+							value="#{lbComun.btnCancelar}">
+							<p:tooltip for="btnCancelar" value="#{lbComun.btnCancelar}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

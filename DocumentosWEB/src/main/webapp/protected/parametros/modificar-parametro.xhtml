@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c2="http://java.sun.com/jsf/composite/c2"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layouts/standard.xhtml">
+
+	<ui:define name="contenido">
+		<h:form id="form-ingreso">
+			<p:panel id="campos-registro" styleClass="panel-formulario"
+				header="#{labelGeneral.actualizar_parametros}">
+				<p:fieldset id="datos-principal" styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_registro}">
+
+					<h:panelGrid id="panel-formulario"
+						columns="2"
+						styleClass="formulario-servicio center-block"
+						columnClasses="label-col,input-col,label-col,input-col">
+						<p:outputLabel value="#{labelAdmin.label_nombre_parametro}:" />
+						<p:outputLabel
+							value="#{parametrosMB.parametroSeleccionado.nombreParametro}" />
+						<p:outputLabel value="#{labelAdmin.label_descripcion_parametro}:" />
+						<p:outputLabel
+							value="#{parametrosMB.parametroSeleccionado.descripcionParametro}" />
+						<p:outputLabel value="#{labelAdmin.label_tipo_parametro}:" />
+						<p:outputLabel
+							value="#{parametrosMB.parametroSeleccionado.tipoDatoDTO.nombreTipoDato}" />
+
+						<p:outputLabel value="#{labelAdmin.label_valor_parametro}"
+							styleClass="campo-obligatorio" />
+
+						<h:panelGroup rendered="#{parametrosMB.valorFecha}">
+							<p:calendar id="fecha" value="#{parametrosMB.fecha}"
+								pattern="#{utilidadMB.formatoFecha}" required="true" maxlength="256"
+								label="#{labelAdmin.label_valor_parametro}" />
+							<p:message for="fecha" />
+						</h:panelGroup>
+
+						<h:panelGroup rendered="#{parametrosMB.valorFechaHora}">
+							<p:calendar id="fechaHora" value="#{parametrosMB.fecha}"
+								pattern="#{utilidadMB.formatoFechaCompleta}"
+								timeZone="#{labelGeneral.time_zone}" required="true" maxlength="256"
+								label="#{labelAdmin.label_valor_parametro}">
+								<f:convertDateTime pattern="#{utilidadMB.formatoFechaCompleta}"
+									timeZone="#{labelAdmin.param_time_zone}" />
+							</p:calendar>
+							<p:message for="fechaHora" />
+						</h:panelGroup>
+
+						<h:panelGroup rendered="#{parametrosMB.valorHora}">
+							<p:calendar id="hora" value="#{parametrosMB.fecha}"
+								pattern="#{utilidadMB.formatoFecha}" timeOnly="true"
+								required="true" readonlyInput="true" maxlength="256"
+								label="#{labelAdmin.label_valor_parametro}" />
+							<p:message for="fechaHora" />
+						</h:panelGroup>
+
+
+						<h:panelGroup rendered="#{parametrosMB.valorBooleano}">
+							<p:selectOneMenu value="#{parametrosMB.valorSiNo}"
+								label="#{labelAdmin.label_valor_parametro}">
+								<f:selectItems value="#{parametrosMB.lSiNo}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+						<h:panelGroup
+							rendered="#{parametrosMB.valorNumeroEntero or parametrosMB.valorNumeroDecimal}">
+							<p:inputText id="numero" value="#{parametrosMB.numero}"
+								maxlength="256" required="true"
+								label="#{labelAdmin.label_valor_parametro}" />
+							<p:message for="numero" />
+						</h:panelGroup>
+
+						<h:panelGroup rendered="#{parametrosMB.valorTexto}">
+							<p:inputTextarea id="texto" value="#{parametrosMB.texto}"
+								required="true" autoResize="false" cols="85" rows="10"
+								label="#{labelAdmin.label_valor_parametro}" maxlength="256">
+							</p:inputTextarea>
+							<p:message for="texto" />
+						</h:panelGroup>
+						
+						<h:panelGroup rendered="#{parametrosMB.valorEmail}">
+							<p:inputText id="email" value="#{parametrosMB.email}"
+								required="true" autoResize="false" maxlength="256"
+								label="#{labelAdmin.label_valor_parametro}"  
+								validatorMessage="#{labelAdmin.val_campo_email}">
+								<f:validator validatorId="co.com.datatools.util.jsf.EmailValidator" />
+							</p:inputText>
+							<p:message for="email" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton styleClass="_op-EDITAR"
+							action="#{parametrosMB.actualizarParametro()}"
+							value="#{lbComun.btnGuardar}" icon="c2-icon-guardar"
+							update="@form" />
+						<p:commandButton value="#{lbComun.btnVolver}"
+							icon="c2-icon-volver" action="#{parametrosMB.volver()}"
+							immediate="true" />
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

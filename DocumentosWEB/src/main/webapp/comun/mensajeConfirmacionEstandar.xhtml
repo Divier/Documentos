@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="frmConfirmRegistraDatos">
+		<p:dialog appendToBody="true" header="#{labelGeneral.confirmacion}"
+			modal="true" showEffect="clip" hideEffect="clip" closable="false"
+			widgetVar="popupConfirmRegistraDatos" id="popupConfirmaRegistraDatos"
+			width="450" resizable="false">
+			<h:panelGrid columns="2" cellspacing="7" styleClass="gridBotones">
+				<p:graphicImage library="img" name="yes.png"></p:graphicImage>
+				<h:outputLabel value="#{labelGeneral.msg_exito_guardar}" />
+			</h:panelGrid>
+			<h:panelGrid columns="1" cellspacing="7" styleClass="gridBotones">
+				<p:commandButton value="#{labelGeneral.boton_cerrar}"
+					process="@this"
+					action="#{principalMB.redireccionarMensajeConfirmacion()}"
+					onclick="PF('popupConfirmRegistraDatos').hide();">
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+</ui:composition>

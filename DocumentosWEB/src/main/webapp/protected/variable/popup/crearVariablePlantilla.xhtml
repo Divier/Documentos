@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog id="dgcrearVariable"
+		header="#{labelVariables.crear_variable_plantilla}" modal="true"
+		appendTo="@(body)" resizable="false" showEffect="clip"
+	 	style="max-height: 80%; overflow:auto;" width="80%"
+		hideEffect="clip" widgetVar="popupCrearVariable" closable="false">
+		<h:form id="form-ingreso">
+			<h:panelGrid styleClass="center-block" columns="1" cellpadding="5">
+				<p:messages id="msgs" autoUpdate="true" showDetail="true"
+					showSummary="false" globalOnly="true" />
+			</h:panelGrid>
+			<p:panel id="campos-registro" styleClass="panel-formulario"
+				header="#{labelVariables.crear_variable_plantilla}">
+				<p:fieldset id="datos-principal" styleClass="fieldset-formulario"
+					legend="#{lbComun.msg_fieldset_registro}">
+					<p:fieldset id="datos-${id_seccion}"
+						styleClass="fieldset-formulario"
+						legend="#{labelVariables.datos_variable}">
+
+						<h:panelGrid id="panel-formulario" styleClass="center-block"
+							columns="4"
+							columnClasses="label-col,input-col,label-col,input-col">
+
+							<p:outputLabel value="#{labelVariables.tipo_variable}"
+								styleClass="campo-obligatorio" for="tipoVariable"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneMenu id="tipoVariable" required="true"
+									requiredMessage="#{labelGeneral.requerido}"
+									value="#{crearVariablePlantillaMB.variableRegistrar.tipoVariableDTO.idTipoVariable}">
+									<f:selectItems
+										value="#{crearVariablePlantillaMB.lstTiposVariable}"></f:selectItems>
+									<p:ajax event="change"
+										listener="#{crearVariablePlantillaMB.verificaTipoVariable}"
+										update="campos-registro" process="@this" />
+								</p:selectOneMenu>
+								<p:message for="tipoVariable" />
+							</h:panelGroup>
+							<p:outputLabel value="#{labelVariables.nombre_variable}"
+								styleClass="campo-obligatorio" for="nombre"></p:outputLabel>
+							<h:panelGroup>
+								<p:inputText id="nombre"
+									value="#{crearVariablePlantillaMB.variableRegistrar.nombreVariable}"
+									required="true" requiredMessage="#{labelGeneral.requerido}"
+									validatorMessage="#{labelVariables.msg_nombre_invalido}"
+									maxlength="200">
+									<f:validateRegex pattern="[a-zA-Z0-9\\_]+" />
+									<p:ajax process="@this" event="change" update="msg_nombre" />
+								</p:inputText>
+								<p:message for="nombre" id="msg_nombre" />
+							</h:panelGroup>
+							<p:outputLabel value="#{labelVariables.descripcion_variable} "
+								styleClass="campo-obligatorio" for="descripcion"></p:outputLabel>
+							<h:panelGroup>
+								<p:inputTextarea rows="2" id="descripcion"
+									value="#{crearVariablePlantillaMB.variableRegistrar.descripcionVariable}"
+									required="true" requiredMessage="#{labelGeneral.requerido}"
+									maxlength="400" autoResize="false">
+									<p:ajax process="@this" event="change" />
+								</p:inputTextarea>
+								<p:message for="descripcion" />
+							</h:panelGroup>
+							<p:outputLabel id="tags" value="#{labelVariables.tags} "
+								styleClass="campo-obligatorio" for="inputTags">
+							</p:outputLabel>
+							<h:panelGroup>
+								<p:inputTextarea rows="2" id="inputTags"
+									value="#{crearVariablePlantillaMB.variableRegistrar.palabraClave}"
+									required="true" requiredMessage="#{labelGeneral.requerido}"
+									autoResize="false" maxlength="400">
+									<p:ajax process="@this" event="change" />
+								</p:inputTextarea>
+								<p:message for="inputTags" />
+							</h:panelGroup>
+							<p:outputLabel value="#{labelVariables.formato_variable} "
+								for="formato"
+								rendered="#{crearVariablePlantillaMB.habilitarFormato}"></p:outputLabel>
+							<h:panelGrid columns="2"
+								rendered="#{crearVariablePlantillaMB.habilitarFormato}">
+								<p:inputText id="formato"
+									value="#{crearVariablePlantillaMB.variableRegistrar.formatoVariable}"
+									maxlength="250">
+									<p:ajax process="@this" event="change"
+										listener="#{crearVariablePlantillaMB.verificaFormatoTipoVariable}"
+										update="campos-registro,msgFormato" />
+								</p:inputText>
+								<p:commandLink>
+									<h:graphicImage library="img" name="help.png"
+										id="tooltipFormato"
+										title="#{crearVariablePlantillaMB.mensajeAyudaFormato}" />
+								</p:commandLink>
+								<p:message id="msgFormato" for="formato" />
+							</h:panelGrid>
+							<p:outputLabel value="#{labelVariables.valor_defecto_variable}"
+								for="valorDefecto" styleClass="campo-obligatorio"
+								rendered="#{!crearVariablePlantillaMB.permiteCargarImagen}"></p:outputLabel>
+							<h:panelGroup
+								rendered="#{!crearVariablePlantillaMB.habilitarValorFecha and !crearVariablePlantillaMB.permiteCargarImagen}">
+								<p:inputText id="valorDefecto"
+									value="#{crearVariablePlantillaMB.variableRegistrar.valorDefecto}"
+									required="true" requiredMessage="#{labelGeneral.requerido}"
+									validatorMessage="#{labelVariables.msg_tipo_variable_invalido}"
+									maxlength="200">
+									<f:validateRegex pattern="#{crearVariablePlantillaMB.pattern}" />
+									<p:ajax process="@this" event="change" update="msgValorDefecto" />
+								</p:inputText>
+								<p:message id="msgValorDefecto" for="valorDefecto"
+									display="text" />
+							</h:panelGroup>
+							<h:panelGroup
+								rendered="#{crearVariablePlantillaMB.habilitarValorFecha}">
+								<p:calendar
+									value="#{crearVariablePlantillaMB.valorDefectoFecha}"
+									id="calValorDefectoFecha"
+									requiredMessage="#{labelGeneral.requerido}"
+									converterMessage="#{labelGeneral.fecha}"
+									required="#{crearVariablePlantillaMB.habilitarValorFecha}"
+									navigator="true" pattern="#{webPrm.lab_calendar_pattern}">
+									<p:ajax process="@this" event="dateSelect" />
+									<p:watermark for="calValorDefectoFecha"
+										value="#{webPrm.lab_calendar_mask_pattern}" />
+								</p:calendar>
+								<p:message for="calValorDefectoFecha" />
+							</h:panelGroup>
+
+							<p:outputLabel value="#{labelVariables.longitud_variable} "
+								for="longitud"
+								rendered="#{crearVariablePlantillaMB.habilitarLongitud}"></p:outputLabel>
+							<h:panelGroup
+								rendered="#{crearVariablePlantillaMB.habilitarLongitud}">
+								<p:inputText id="longitud"
+									value="#{crearVariablePlantillaMB.longitud}"
+									converterMessage="#{labelVariables.msg_error_formato_numero}">
+									<p:ajax process="@this" event="change" update="msgLongitud" />
+								</p:inputText>
+								<p:message id="msgLongitud" for="longitud" />
+							</h:panelGroup>
+							<p:outputLabel
+								value="#{labelVariables.orden_jerarquico_variable}: "
+								for="ordenJerarquico"></p:outputLabel>
+							<h:panelGroup>
+								<p:selectOneMenu id="ordenJerarquico" required="false"
+									requiredMessage="#{labelGeneral.requerido}"
+									value="#{crearVariablePlantillaMB.variableRegistrar.contextoAplicacionVariableDTO.idContextoAplicacion}">
+									<f:selectItems
+										value="#{crearVariablePlantillaMB.lstOrdenJerarquico}" />
+									<p:ajax process="@this" event="change"
+										listener="#{crearVariablePlantillaMB.habilitarProcesos}"
+										update="campos-registro"></p:ajax>
+								</p:selectOneMenu>
+								<p:message for="ordenJerarquico" />
+							</h:panelGroup>
+
+							<p:outputLabel id="procesoLabel"
+								value="#{labelVariables.proceso_variable}" for="proceso"
+								styleClass="campo-obligatorio"
+								rendered="#{crearVariablePlantillaMB.habilitarProceso}">
+							</p:outputLabel>
+							<h:panelGroup
+								rendered="#{crearVariablePlantillaMB.habilitarProceso}">
+								<p:selectOneMenu id="proceso"
+									required="#{crearVariablePlantillaMB.habilitarProceso}"
+									requiredMessage="#{labelGeneral.requerido}"
+									value="#{crearVariablePlantillaMB.variableRegistrar.procesoDTO.idProceso}">
+									<f:selectItems value="#{crearVariablePlantillaMB.lstProcesos}" />
+									<p:ajax process="@this" update="campos-registro" event="change" />
+								</p:selectOneMenu>
+								<p:message id="msgproceso" for="proceso" />
+							</h:panelGroup>
+
+						</h:panelGrid>
+					</p:fieldset>
+					<p:fieldset id="datos-imagen" styleClass="fieldset-formulario"
+						legend="#{labelVariables.cargar_imagen}"
+						rendered="#{crearVariablePlantillaMB.permiteCargarImagen}">
+						<h:panelGrid styleClass="center-block" columns="2"
+							columnClasses="label-col,input-col,label-col,input-col">
+
+							<p:outputLabel value="#{labelVariables.cargar_imagen} "
+								for="uploadFile" styleClass="campo-obligatorio"></p:outputLabel>
+							<h:panelGroup>
+								<p:fileUpload id="uploadFile"
+									fileUploadListener="#{crearVariablePlantillaMB.cargarArchivo}"
+									mode="advanced" dragDropSupport="false" fileLimit="1"
+									invalidFileMessage="#{labelVariables.invalidFileMessage}"
+									fileLimitMessage="#{labelVariables.fileLimitMessage}"
+									label="#{labelVariables.label_examinar}"
+									uploadLabel="#{labelVariables.label_cargar}"
+									cancelLabel="#{labelVariables.label_cancelar}"
+									update="campos-registro,formato,datos-imagen"
+									sizeLimit="2048000" invalidSizeMessage="#{labelVariables.invalidFileSize}"
+									allowTypes="#{crearVariablePlantillaMB.extensionesPermitidas}"></p:fileUpload>
+								<p:message id="msgFileRequired" for="uploadFile" />
+								<h:outputText id="msgFileUploaded"
+									value="#{labelVariables.label_archivo_cargado}: #{crearVariablePlantillaMB.nombreArchivo}"
+									rendered="#{crearVariablePlantillaMB.file !=null}"
+									style="font-weight: bold;" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</p:fieldset>
+					<h:panelGrid styleClass="center-block" columns="2" cellpadding="5">
+						<p:commandButton id="btnGuardar"
+							action="#{crearVariablePlantillaMB.crearVariablePlantilla}"
+							icon="c2-icon-guardar" process="@form"
+							value="#{lbComun.btnGuardar}" update=":form-ingreso">
+							<p:tooltip for="btnGuardar" value="#{lbComun.btnGuardar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_guardar}" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:commandButton id="btnCancelar" icon="c2-icon-cancelar"
+							process="@this" immediate="true" value="#{lbComun.btnCancelar}"
+							onclick="PF('popupCrearVariable').hide()">
+							<p:tooltip for="btnCancelar" value="#{lbComun.btnCancelar}" />
+							<p:confirm header="#{lbComun.msg_tit_confirmar}"
+								message="#{lbComun.msg_confirm_volver_cancelar}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</p:panel>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

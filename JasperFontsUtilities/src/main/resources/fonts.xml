@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="arialDocsFamily" class="net.sf.jasperreports.engine.fonts.SimpleFontFamily">
+		<property name="name" value="arial" />
+		<property name="normal" value="fonts/arial.ttf" />
+		<property name="bold" value="fonts/arialbd.ttf" />
+		<property name="italic" value="fonts/ariali.ttf" />
+		<property name="boldItalic" value="fonts/arialbi.ttf" />
+		<property name="pdfEncoding" value="Identity-H" />
+		<property name="pdfEmbedded" value="true" />
+	</bean>
+	<bean id="calibriDocsFamily" class="net.sf.jasperreports.engine.fonts.SimpleFontFamily">
+		<property name="name" value="calibri" />
+		<property name="normal" value="fonts/calibri.ttf" />
+		<property name="bold" value="fonts/calibrib.ttf" />
+		<property name="italic" value="fonts/calibrii.ttf" />
+		<property name="boldItalic" value="fonts/calibriz.ttf" />
+		<property name="pdfEncoding" value="Identity-H" />
+		<property name="pdfEmbedded" value="true" />
+	</bean>
+	<bean id="timesDocsFamily" class="net.sf.jasperreports.engine.fonts.SimpleFontFamily">
+		<property name="name" value="times" />
+		<property name="normal" value="fonts/times.ttf" />
+		<property name="bold" value="fonts/timesbd.ttf" />
+		<property name="italic" value="fonts/timesi.ttf" />
+		<property name="boldItalic" value="fonts/timesbi.ttf" />
+		<property name="pdfEncoding" value="Identity-H" />
+		<property name="pdfEmbedded" value="true" />
+	</bean>
+</beans>

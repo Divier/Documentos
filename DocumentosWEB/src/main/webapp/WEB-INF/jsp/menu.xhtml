@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:form id="formMenu">
+	<h:panelGroup id="pnlGrpMenu">
+		<div class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<p:menubar id="menuBarDoc"
+					rendered="#{principalMB.usuarioSesion != null}">
+					<p:menuitem value="#{labelGeneral.submenu_inicio}"
+						styleClass="menuitem-parent"
+						action="#{principalMB.navegar('inicio')}" ajax="false">
+					</p:menuitem>
+					<c:forEach var="menu" items="#{menuMB.menuDtos}">
+						<p:submenu label="#{menu.label}">
+							<c:forEach var="submenu" items="#{menu.submenu}">
+								<p:menuitem value="#{submenu.label}"
+									action="#{principalMB.navegar(submenu.recurso.nombreRecurso)}">
+								</p:menuitem>
+							</c:forEach>
+						</p:submenu>
+					</c:forEach>
+					<p:menuitem value="#{labelGeneral.salir}" icon="ui-icon-extlink"
+						styleClass="menuitem-parent" style="float:right"
+						action="#{principalMB.cerrarSesion()}" />
+					<f:facet name="options">
+						<h:panelGrid columns="2" style="line-height: 40px;">
+							<h:outputText value="#{labelGeneral.usuario}: " />
+							<h:outputText value="#{principalMB.usuarioSesion}" />
+						</h:panelGrid>
+					</f:facet>
+				</p:menubar>
+			</div>
+		</div>
+	</h:panelGroup>
+</h:form>
+</html>

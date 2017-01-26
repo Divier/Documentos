@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ <display-name>DocumentosWEB</display-name>
+ <!-- <distributable/> -->
+ <context-param>
+  <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <!-- FACES -->
+ <context-param>
+  <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+  <param-value>.xhtml</param-value>
+ </context-param>
+ <context-param>
+  <!-- Causes Facelets to refresh templates during development -->
+  <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
+  <param-value>1</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <context-param>
+  <!-- Enables special Facelets debug output during development -->
+  <param-name>javax.faces.PROJECT_STAGE</param-name>
+  <param-value>Development</param-value>
+ </context-param>
+ <context-param>
+  <description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
+  <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+  <param-value>client</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+  <param-value>resources.application</param-value>
+ </context-param>
+ <!-- PRIMEFACES -->
+ <context-param>
+  <param-name>primefaces.THEME</param-name>
+  <param-value>delta</param-value>
+ </context-param>
+ <context-param>
+  <param-name>primefaces.UPLOADER</param-name>
+  <param-value>commons</param-value>
+ </context-param>
+ 
+ <!-- DOCUMENTOS -->
+ <context-param>
+  <param-name>co.com.datatools.documentos.ID_APLICACION</param-name>
+  <param-value>DOCUMENTOS</param-value>
+ </context-param>
+ <!-- Enforce Character Encoding -->
+ <filter>
+  <filter-name>charEncodingFilter</filter-name>
+  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  <init-param>
+   <param-name>encoding</param-name>
+   <param-value>UTF-8</param-value>
+  </init-param>
+  <init-param>
+   <param-name>forceEncoding</param-name>
+   <param-value>true</param-value>
+  </init-param>
+ </filter>
+ <filter>
+  <filter-name>PrimeFaces FileUpload Filter</filter-name>
+  <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+ </filter>
+ <filter-mapping>
+  <filter-name>charEncodingFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>PrimeFaces FileUpload Filter</filter-name>
+  <servlet-name>Faces Servlet</servlet-name>
+ </filter-mapping>
+ <servlet>
+  <servlet-name>Faces Servlet</servlet-name>
+  <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet>
+  <display-name>ReporteServlet</display-name>
+  <servlet-name>ReporteServlet</servlet-name>
+  <servlet-class>co.com.datatools.documentos.util.ReporteServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>/faces/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>*.xhtml</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>*.jsf</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>*.faces</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ReporteServlet</servlet-name>
+  <url-pattern>/ReporteServlet</url-pattern>
+ </servlet-mapping>
+ <!--  <security-role> 
+   <description>Administrador del sistema</description> 
+   <role-name>Administrador</role-name> 
+  </security-role> 
+  <security-role> 
+   <description>Editor de plantillas</description> 
+   <role-name>Administrador limitado</role-name> 
+  </security-role> -->
+ <session-config>
+  <!-- Session idle timeout in min. -->
+  <session-timeout>30</session-timeout>
+ </session-config>
+ <mime-mapping>
+  <extension>woff</extension>
+  <mime-type>application/x-font-woff</mime-type>
+ </mime-mapping>
+ <welcome-file-list>
+  <welcome-file>/protected/index.xhtml</welcome-file>
+ </welcome-file-list>
+ <error-page>
+  <error-code>400</error-code>
+  <location>/error/denied.xhtml</location>
+ </error-page>
+ <error-page>
+  <error-code>401</error-code>
+  <location>/error/denied.xhtml</location>
+ </error-page>
+ <error-page>
+  <error-code>403</error-code>
+  <location>/error/403.xhtml</location>
+ </error-page>
+ <error-page>
+  <error-code>404</error-code>
+  <location>/error/not_found.xhtml</location>
+ </error-page>
+ <error-page>
+  <error-code>408</error-code>
+  <location>/error/408.xhtml</location>
+ </error-page>
+ <error-page>
+  <error-code>500</error-code>
+  <location>/error/server_error.xhtml</location>
+ </error-page>
+ <security-constraint>
+  <display-name>Documentos sec constraint</display-name>
+  <web-resource-collection>
+   <web-resource-name>protegido</web-resource-name>
+   <description>Área protegida dentro de la carpeta protegido</description>
+   <url-pattern>/protected/*</url-pattern>
+   <http-method>GET</http-method>
+   <http-method>POST</http-method>
+   <http-method>PUT</http-method>
+   <http-method>DELETE</http-method>
+  </web-resource-collection>
+  <auth-constraint>
+   <description>Rol generico permitido para entrar, controlado por seguridad</description>
+   <role-name>gen_DOCUMENTOS</role-name>
+  </auth-constraint>
+ </security-constraint>
+ <!-- System roles 
+  <security-constraint> 
+   <display-name>Editor Security Constraint</display-name> 
+   <web-resource-collection> 
+    <web-resource-name>Protected Area</web-resource-name> 
+    <url-pattern>/protected/*</url-pattern> 
+    <url-pattern>/app/*</url-pattern> 
+    <http-method>DELETE</http-method> 
+    <http-method>GET</http-method> 
+    <http-method>POST</http-method> 
+    <http-method>PUT</http-method> 
+   </web-resource-collection> 
+   <auth-constraint> 
+    <role-name>Administrador limitado</role-name> 
+    <role-name>Administrador</role-name> 
+   </auth-constraint> 
+   <user-data-constraint> 
+    <transport-guarantee>NONE</transport-guarantee> 
+   </user-data-constraint> 
+  </security-constraint> 
+  <security-constraint> 
+   <display-name>Admin Security Constraint</display-name> 
+   <web-resource-collection> 
+    <web-resource-name>Area protegida</web-resource-name> 
+    <url-pattern>/protected/usuarios/*</url-pattern> 
+    <url-pattern>/protected/parametros/*</url-pattern> 
+    <url-pattern>/app/*</url-pattern> 
+    <http-method>DELETE</http-method> 
+    <http-method>GET</http-method> 
+    <http-method>POST</http-method> 
+    <http-method>PUT</http-method> 
+   </web-resource-collection> 
+   <auth-constraint> 
+    <description>Rol</description> 
+    <role-name>Administrador</role-name> 
+   </auth-constraint> 
+   <user-data-constraint> 
+    <transport-guarantee>NONE</transport-guarantee> 
+   </user-data-constraint> 
+  </security-constraint> 
+ Login page -->
+ <login-config>
+  <auth-method>FORM</auth-method>
+  <realm-name>sso</realm-name>
+  <form-login-config>
+   <form-login-page>/public/login.xhtml</form-login-page>
+   <form-error-page>/public/login.xhtml</form-error-page>
+  </form-login-config>
+ </login-config>
+ <security-role>
+  <role-name>gen_DOCUMENTOS</role-name>
+ </security-role>
+</web-app>

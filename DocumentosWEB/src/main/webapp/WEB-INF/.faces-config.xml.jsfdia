@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM
+  NAME="rules:#protected#plantilla#areaTrabajoPlantilla.xhtml"
+  PATH="/protected/plantilla/areaTrabajoPlantilla.xhtml"
+  SHAPE="840,136,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+</PROCESS>
